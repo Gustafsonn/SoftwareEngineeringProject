@@ -22,6 +22,16 @@
             Title="Administrator"
             ContentTemplate="{DataTemplate admin:MainPage}"
             Route="Administrator/MainPage" />
+        
+        <ShellContent
+            Title="Map View"
+            ContentTemplate="{DataTemplate admin:MapPage}"
+            Route="Administrator/MapPage" />
+            
+        <ShellContent
+            Title="Settings"
+            ContentTemplate="{DataTemplate admin:SettingsPage}"
+            Route="Administrator/SettingsPage" />
     </FlyoutItem>
 
     <FlyoutItem Title="Operations Manager">

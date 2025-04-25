@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
+    x:Class="SET09102.Administrator.Pages.MapPage"
+    Title="Sensor Map">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <Label Text="Sensor Map View" 
+               FontSize="24" 
+               HorizontalOptions="Center" 
+               Margin="0,20,0,20"/>
+
+        <!-- Map View -->
+        <maps:Map Grid.Row="1"
+                  x:Name="SensorMap"
+                  MapType="Street"
+                  IsShowingUser="False" />
+
+        <!-- Navigation Bar -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,*" Padding="10">
+            <Button Grid.Column="0"
+                    Text="🏠 Dashboard"
+                    Clicked="OnDashboardClicked"
+                    BackgroundColor="Transparent" />
+            <Button Grid.Column="1"
+                    Text="🗺️ Map View"
+                    Clicked="OnMapViewClicked"
+                    BackgroundColor="Transparent" />
+            <Button Grid.Column="2"
+                    Text="⚙️ Settings"
+                    Clicked="OnSettingsClicked"
+                    BackgroundColor="Transparent" />
+        </Grid>
+    </Grid>
+</ContentPage>
