@@ -3,6 +3,8 @@
 
 ### VisualStudioCode ###
 .vscode/*
+SET09102/.vs/*
+SET09102/.vs
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
