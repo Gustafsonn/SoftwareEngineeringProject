@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SET09102.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+
+            <Label 
+                Text="Environmental Monitoring"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Label 
+                Text="Database Status"
+                SemanticProperties.HeadingLevel="Level2"
+                FontSize="18"
+                HorizontalOptions="Center" />
+
+            <Label 
+                x:Name="DatabaseStatusLabel"
+                Text="Database not initialized"
+                FontSize="16"
+                HorizontalOptions="Center" />
+
+            <Button 
+                x:Name="InitializeDatabaseBtn"
+                Text="Initialize Database"
+                SemanticProperties.Hint="Initializes the database and imports sample data"
+                Clicked="OnInitializeDatabase"
+                HorizontalOptions="Center" />
+
+            <Button 
+                x:Name="ShowDatabaseBtn"
+                Text="Show Database Location"
+                SemanticProperties.Hint="Shows the location of the SQLite database file"
+                Clicked="OnShowDatabaseLocation"
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
