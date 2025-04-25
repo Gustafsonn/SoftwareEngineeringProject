@@ -11,12 +11,7 @@ public partial class MainPage : ContentPage
 
     private async void OnDashboardClicked(object sender, EventArgs e)
     {
-        // Already on dashboard, do nothing
-    }
-
-    private async void OnMapViewClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//Administrator/MapPage");
+        await Shell.Current.GoToAsync("//Administrator/MainPage");
     }
 
     private async void OnSettingsClicked(object sender, EventArgs e)
