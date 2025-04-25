@@ -16,6 +16,21 @@ public partial class MainPage : ContentPage
         _dataImportService = dataImportService;
     }
 
+    private async void OnAdminClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("Administrator/MainPage");
+    }
+
+    private async void OnOpsManagerClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("OperationsManager/MainPage");
+    }
+
+    private async void OnEnvScientistClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("EnvironmentalScientist/MainPage");
+    }
+
     protected override void OnAppearing()
     {
         base.OnAppearing();

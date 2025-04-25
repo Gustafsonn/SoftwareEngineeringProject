@@ -11,4 +11,21 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
+    <Application.MainPage>
+        <Shell>
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+            
+            <FlyoutItem Title="Administrator" Icon="👨‍💼">
+                <ShellContent Route="Administrator/MainPage" ContentTemplate="{DataTemplate local:Administrator.Pages.MainPage}" />
+            </FlyoutItem>
+            
+            <FlyoutItem Title="Operations Manager" Icon="👨‍💼">
+                <ShellContent Route="OperationsManager/MainPage" ContentTemplate="{DataTemplate local:OperationsManager.Pages.MainPage}" />
+            </FlyoutItem>
+            
+            <FlyoutItem Title="Environmental Scientist" Icon="👨‍🔬">
+                <ShellContent Route="EnvironmentalScientist/MainPage" ContentTemplate="{DataTemplate local:EnvironmentalScientist.Pages.MainPage}" />
+            </FlyoutItem>
+        </Shell>
+    </Application.MainPage>
 </Application>

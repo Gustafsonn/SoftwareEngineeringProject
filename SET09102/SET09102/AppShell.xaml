@@ -4,12 +4,38 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SET09102"
+    xmlns:admin="clr-namespace:SET09102.Administrator.Pages"
+    xmlns:ops="clr-namespace:SET09102.OperationsManager.Pages"
+    xmlns:env="clr-namespace:SET09102.EnvironmentalScientist.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="SET09102">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <FlyoutItem Title="Home">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Administrator">
+        <ShellContent
+            Title="Administrator"
+            ContentTemplate="{DataTemplate admin:MainPage}"
+            Route="Administrator/MainPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Operations Manager">
+        <ShellContent
+            Title="Operations Manager"
+            ContentTemplate="{DataTemplate ops:MainPage}"
+            Route="OperationsManager/MainPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Environmental Scientist">
+        <ShellContent
+            Title="Environmental Scientist"
+            ContentTemplate="{DataTemplate env:MainPage}"
+            Route="EnvironmentalScientist/MainPage" />
+    </FlyoutItem>
 
 </Shell>
