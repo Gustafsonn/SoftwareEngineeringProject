@@ -9,11 +9,11 @@ namespace SET09102
             InitializeComponent();
 
             // Register routes for role-specific pages
-            Routing.RegisterRoute("Administrator/MainPage", typeof(Administrator.Pages.MainPage));
-            Routing.RegisterRoute("Administrator/MapPage", typeof(Administrator.Pages.MapPage));
-            Routing.RegisterRoute("Administrator/SettingsPage", typeof(Administrator.Pages.SettingsPage));
-            Routing.RegisterRoute("OperationsManager/MainPage", typeof(OperationsManager.Pages.MainPage));
-            Routing.RegisterRoute("EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));
+            Routing.RegisterRoute("//Administrator/MainPage", typeof(Administrator.Pages.MainPage));
+            Routing.RegisterRoute("//Administrator/SettingsPage", typeof(Administrator.Pages.SettingsPage));
+            Routing.RegisterRoute("//OperationsManager/MainPage", typeof(OperationsManager.Pages.MainPage));
+            Routing.RegisterRoute("//EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));
+            Routing.RegisterRoute("//EnvironmentalScientist/MapPage", typeof(EnvironmentalScientist.Pages.MapPage));
         }
     }
 }

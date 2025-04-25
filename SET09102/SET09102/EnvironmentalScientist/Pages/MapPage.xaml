@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
-    x:Class="SET09102.Administrator.Pages.MapPage"
+    x:Class="SET09102.EnvironmentalScientist.Pages.MapPage"
     Title="Sensor Map">
 
     <Grid RowDefinitions="Auto,*,Auto">
@@ -35,4 +35,4 @@
                     BackgroundColor="Transparent" />
         </Grid>
     </Grid>
-</ContentPage>
+</ContentPage> 

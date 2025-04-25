@@ -3,10 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SET09102.EnvironmentalScientist.Pages.MainPage"
              Title="Environmental Scientist">
-    <VerticalStackLayout>
-        <Label Text="Hello Environmental Scientist" 
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <Label Text="Environmental Scientist Dashboard" 
+               FontSize="24" 
                HorizontalOptions="Center" 
-               VerticalOptions="Center" 
-               FontSize="24"/>
-    </VerticalStackLayout>
+               Margin="0,20,0,20"/>
+
+        <!-- Content -->
+        <VerticalStackLayout Grid.Row="1">
+            <Label Text="Hello Environmental Scientist" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Center" 
+                   FontSize="24"/>
+        </VerticalStackLayout>
+
+        <!-- Navigation Bar -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,*" Padding="10">
+            <Button Grid.Column="0"
+                    Text="🏠 Dashboard"
+                    Clicked="OnDashboardClicked"
+                    BackgroundColor="Transparent" />
+            <Button Grid.Column="1"
+                    Text="🗺️ Map View"
+                    Clicked="OnMapViewClicked"
+                    BackgroundColor="Transparent" />
+            <Button Grid.Column="2"
+                    Text="⚙️ Settings"
+                    Clicked="OnSettingsClicked"
+                    BackgroundColor="Transparent" />
+        </Grid>
+    </Grid>
 </ContentPage> 

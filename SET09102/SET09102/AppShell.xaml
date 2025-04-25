@@ -14,38 +14,38 @@
         <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate local:MainPage}"
-            Route="MainPage" />
+            Route="//MainPage" />
     </FlyoutItem>
 
     <FlyoutItem Title="Administrator">
         <ShellContent
             Title="Administrator"
             ContentTemplate="{DataTemplate admin:MainPage}"
-            Route="Administrator/MainPage" />
-        
-        <ShellContent
-            Title="Map View"
-            ContentTemplate="{DataTemplate admin:MapPage}"
-            Route="Administrator/MapPage" />
+            Route="//Administrator/MainPage" />
             
         <ShellContent
             Title="Settings"
             ContentTemplate="{DataTemplate admin:SettingsPage}"
-            Route="Administrator/SettingsPage" />
+            Route="//Administrator/SettingsPage" />
     </FlyoutItem>
 
     <FlyoutItem Title="Operations Manager">
         <ShellContent
             Title="Operations Manager"
             ContentTemplate="{DataTemplate ops:MainPage}"
-            Route="OperationsManager/MainPage" />
+            Route="//OperationsManager/MainPage" />
     </FlyoutItem>
 
     <FlyoutItem Title="Environmental Scientist">
         <ShellContent
             Title="Environmental Scientist"
             ContentTemplate="{DataTemplate env:MainPage}"
-            Route="EnvironmentalScientist/MainPage" />
+            Route="//EnvironmentalScientist/MainPage" />
+            
+        <ShellContent
+            Title="Map View"
+            ContentTemplate="{DataTemplate env:MapPage}"
+            Route="//EnvironmentalScientist/MapPage" />
     </FlyoutItem>
 
 </Shell>

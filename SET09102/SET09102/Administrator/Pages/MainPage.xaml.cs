@@ -16,11 +16,11 @@ public partial class MainPage : ContentPage
 
     private async void OnMapViewClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("/Administrator/MapPage");
+        await Shell.Current.GoToAsync("//Administrator/MapPage");
     }
 
     private async void OnSettingsClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("/Administrator/SettingsPage");
+        await Shell.Current.GoToAsync("//Administrator/SettingsPage");
     }
 } 

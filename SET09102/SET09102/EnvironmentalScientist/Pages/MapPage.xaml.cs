@@ -4,7 +4,7 @@ using SET09102.Services;
 using Microsoft.Data.Sqlite;
 using System.Runtime.InteropServices;
 
-namespace SET09102.Administrator.Pages
+namespace SET09102.EnvironmentalScientist.Pages
 {
     public partial class MapPage : ContentPage
     {
@@ -27,38 +27,6 @@ namespace SET09102.Administrator.Pages
                     System.Diagnostics.Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
                 }
                 throw;
-            }
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            
-            if (!_isInitialized)
-            {
-                try
-                {
-                    await InitializeMapAsync();
-                    _isInitialized = true;
-                }
-                catch (COMException ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"COM Exception in OnAppearing: {ex.Message}");
-                    await DisplayAlert("Map Error", 
-                        "Failed to initialize the map control. Please ensure you have the necessary permissions and try again.", 
-                        "OK");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Error in OnAppearing: {ex.Message}");
-                    if (ex.InnerException != null)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
-                    }
-                    await DisplayAlert("Error", 
-                        $"Failed to initialize map: {ex.Message}", 
-                        "OK");
-                }
             }
         }
 
@@ -119,11 +87,14 @@ namespace SET09102.Administrator.Pages
 
                 // Load sensors
                 await LoadSensorsAsync();
+                _isInitialized = true;
             }
             catch (COMException ex)
             {
                 System.Diagnostics.Debug.WriteLine($"COM Exception in InitializeMapAsync: {ex.Message}");
-                throw;
+                await DisplayAlert("Map Error", 
+                    "Failed to initialize the map control. Please ensure you have the necessary permissions and try again.", 
+                    "OK");
             }
             catch (Exception ex)
             {
@@ -132,7 +103,9 @@ namespace SET09102.Administrator.Pages
                 {
                     System.Diagnostics.Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
                 }
-                throw;
+                await DisplayAlert("Error", 
+                    $"Failed to initialize map: {ex.Message}", 
+                    "OK");
             }
         }
 
@@ -185,17 +158,20 @@ namespace SET09102.Administrator.Pages
 
         private async void OnDashboardClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//Administrator/MainPage");
+            await Shell.Current.GoToAsync("//EnvironmentalScientist/MainPage");
         }
 
         private async void OnMapViewClicked(object sender, EventArgs e)
         {
-            // Already on map view
+            if (!_isInitialized)
+            {
+                await InitializeMapAsync();
+            }
         }
 
         private async void OnSettingsClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//Administrator/SettingsPage");
+            await Shell.Current.GoToAsync("//EnvironmentalScientist/SettingsPage");
         }
     }
 } 

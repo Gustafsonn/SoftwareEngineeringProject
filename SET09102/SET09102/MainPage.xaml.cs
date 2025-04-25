@@ -18,17 +18,17 @@ public partial class MainPage : ContentPage
 
     private async void OnAdminClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("Administrator/MainPage");
+        await Shell.Current.GoToAsync("//Administrator/MainPage");
     }
 
     private async void OnOpsManagerClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("OperationsManager/MainPage");
+        await Shell.Current.GoToAsync("//OperationsManager/MainPage");
     }
 
     private async void OnEnvScientistClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("EnvironmentalScientist/MainPage");
+        await Shell.Current.GoToAsync("//EnvironmentalScientist/MainPage");
     }
 
     protected override void OnAppearing()
