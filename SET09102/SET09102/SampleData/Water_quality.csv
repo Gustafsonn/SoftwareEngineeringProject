@@ -1,8 +1,4 @@
-﻿Site Name:,Glencorse B,,,,
-Sample Period:,01/01/2024 to 31/12/2024,,,,
-Location,55°51′40″N 3°15′14″W,,,,
-,,,,,
-Date,Time,Nitrate (mg l-1),Nitrite <mg l-1),Phosphate (mg l-1),EC (cfu/100ml)
+﻿Date,Time,Nitrate (mg l-1),Nitrite <mg l-1),Phosphate (mg l-1),EC (cfu/100ml)
 01/02/2025,01:00:00,26.33,1.33,0.07,
 01/02/2025,02:00:00,23.4,1.52,0.06,
 01/02/2025,03:00:00,28.9,1.32,0.05,
