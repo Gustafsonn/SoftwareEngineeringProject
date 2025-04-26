@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SET09102.OperationsManager.Pages.DataVerificationPage"
+             Title="Data Verification">
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Padding="20">
+            <!-- Header -->
+            <Label Text="Data Verification" FontSize="24" FontAttributes="Bold" Grid.Row="0" HorizontalOptions="Center" Margin="0,0,0,10" />
+
+            <!-- Table Selection Buttons -->
+            <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                <Button Text="Show Air Quality" Clicked="OnShowAirQualityClicked" />
+                <Button Text="Show Water Quality" Clicked="OnShowWaterQualityClicked" />
+                <Button Text="Show Weather Conditions" Clicked="OnShowWeatherConditionsClicked" />
+            </StackLayout>
+
+            <!-- Summary Label -->
+            <Label x:Name="SummaryLabel"
+                   Grid.Row="2"
+                   FontSize="16"
+                   FontAttributes="Italic"
+                   Margin="0,0,0,10"
+                   HorizontalOptions="Center" />
+
+            <!-- Results List -->
+            <CollectionView x:Name="DataList"
+                           Grid.Row="3"
+                           Margin="0,0,0,10">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10">
+                            <Label Text="{Binding Display}" FontAttributes="Bold" />
+                            <Label Text="{Binding Status}" />
+                            <Label Text="{Binding Details}" FontSize="12" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Refresh Button -->
+            <Button Text="Refresh"
+                    Grid.Row="4"
+                    Clicked="OnRefreshClicked"
+                    HorizontalOptions="Center"
+                    Margin="0,10,0,0" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
