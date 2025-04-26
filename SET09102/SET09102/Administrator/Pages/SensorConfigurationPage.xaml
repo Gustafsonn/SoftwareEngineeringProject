@@ -10,7 +10,7 @@
             <Frame BorderColor="Gray" Padding="10">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Select Sensor" FontSize="18" FontAttributes="Bold"/>
-                    <Picker x:Name="SensorPicker" Title="Select a sensor"/>
+                    <Picker x:Name="SensorPicker" Title="Select a sensor" SelectedIndexChanged="OnSensorSelected"/>
                 </VerticalStackLayout>
             </Frame>
 

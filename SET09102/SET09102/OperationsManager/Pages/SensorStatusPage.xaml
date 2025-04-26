@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ops="clr-namespace:SET09102.OperationsManager.Pages"
+             x:Class="SET09102.OperationsManager.Pages.SensorStatusPage"
+             Title="Sensor Status">
+    
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="10" Padding="10">
+                <Label Text="Sensor Status Dashboard" 
+                       FontSize="24" 
+                       HorizontalOptions="Center"/>
+                
+                <SearchBar Placeholder="Search sensors..."
+                          TextChanged="OnSearchTextChanged"/>
+                
+                <CollectionView x:Name="SensorStatusCollection"
+                              ItemsSource="{Binding SensorStatuses}"
+                              SelectionMode="Single"
+                              SelectionChanged="OnSensorSelected">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="10" Margin="5">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="{Binding SensorName}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding Location}"/>
+                                        <Label Text="{Binding Status}"/>
+                                        <Label Text="{Binding LastUpdate, StringFormat='Last Update: {0:g}'}"/>
+                                    </VerticalStackLayout>
+                                    <VerticalStackLayout Grid.Column="1" 
+                                                       HorizontalOptions="End">
+                                        <Label Text="{Binding BatteryLevel, StringFormat='Battery: {0}%'}"
+                                               TextColor="{Binding BatteryLevel, Converter={StaticResource BatteryLevelToColorConverter}}"/>
+                                        <Label Text="{Binding SignalStrength, StringFormat='Signal: {0}%'}"
+                                               TextColor="{Binding SignalStrength, Converter={StaticResource SignalStrengthToColorConverter}}"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+        <ops:OpsManagerNavigationBar Grid.Row="1" />
+    </Grid>
+</ContentPage> 

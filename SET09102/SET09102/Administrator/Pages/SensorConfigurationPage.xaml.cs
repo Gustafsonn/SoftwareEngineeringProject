@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
+using SET09102.Models;
+using SET09102.Services;
 
 namespace SET09102.Administrator.Pages
 {

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SET09102.OperationsManager.Pages.OpsManagerNavigationBar">
 
-    <Grid ColumnDefinitions="*,*,*" 
+    <Grid ColumnDefinitions="*,*,*,*" 
           BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1E}"
           Padding="10">
             
@@ -14,14 +14,20 @@
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
 
         <Button Grid.Column="1"
-                Text="Operations Home"
-                Clicked="OnHomeClicked"
+                Text="📡 Sensor Status"
+                Clicked="OnSensorStatusClicked"
                 BackgroundColor="Transparent"
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
 
         <Button Grid.Column="2"
-                Text="📊 Data Verification"
-                Clicked="OnDataVerificationClicked"
+                Text="🔧 Maintenance"
+                Clicked="OnMaintenanceClicked"
+                BackgroundColor="Transparent"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+
+        <Button Grid.Column="3"
+                Text="⚠️ Malfunctions"
+                Clicked="OnMalfunctionsClicked"
                 BackgroundColor="Transparent"
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
     </Grid>
