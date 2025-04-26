@@ -18,10 +18,5 @@ namespace SET09102.OperationsManager.Pages
         {
             await Shell.Current.GoToAsync("//OperationsManager/MainPage");
         }
-
-        private async void OnDataClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("//OperationsManager/DataStoragePage");
-        }
     }
 }

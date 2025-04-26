@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:admin="clr-namespace:SET09102.Administrator.Pages"
+             x:Class="SET09102.Administrator.Pages.DataStoragePage"
+             Title="DataStoragePage">
+	<Grid RowDefinitions="*,Auto">
+		<ScrollView Grid.Row="0">
+			<VerticalStackLayout Spacing="20" Padding="20">
+				<Label Text="Data Storage Management"
+                       FontSize="24"
+                       HorizontalOptions="Center" />
+
+				<!-- Database Status -->
+				<Frame>
+					<VerticalStackLayout>
+						<Label Text="Database Location:" FontAttributes="Bold" />
+						<Label x:Name="DatabaseLocationLabel" Text="/path/to/database.db" FontSize="12" />
+						<Label Text="Database Size:" FontAttributes="Bold" />
+						<Label x:Name="DatabaseSizeLabel" Text="-" FontSize="12" />
+						<Label Text="Last Backup:" FontAttributes="Bold" />
+						<Label x:Name="LastBackupLabel" Text="-" FontSize="12" />
+					</VerticalStackLayout>
+				</Frame>
+
+				<!-- Backup Controls -->
+				<Frame>
+					<VerticalStackLayout Spacing="10">
+						<Button Text="Create Backup" Clicked="OnCreateBackupClicked" />
+						<Label Text="Available Backups:" FontAttributes="Bold" />
+						<CollectionView x:Name="BackupsList" HeightRequest="120">
+							<CollectionView.ItemTemplate>
+								<DataTemplate>
+									<Grid ColumnDefinitions="*,Auto,Auto" Padding="5">
+										<Label Text="{Binding Name}" Grid.Column="0" />
+										<Button Text="Restore" Grid.Column="1" Clicked="OnRestoreBackupClicked" CommandParameter="{Binding Name}" />
+										<Button Text="Delete" Grid.Column="2" Clicked="OnDeleteBackupClicked" CommandParameter="{Binding Name}" />
+									</Grid>
+								</DataTemplate>
+							</CollectionView.ItemTemplate>
+						</CollectionView>
+					</VerticalStackLayout>
+				</Frame>
+			</VerticalStackLayout>
+		</ScrollView>
+		<admin:AdminNavigationBar Grid.Row="1" />
+	</Grid>
+</ContentPage>
