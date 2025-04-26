@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:admin="clr-namespace:SET09102.Administrator.Pages"
              x:Class="SET09102.Administrator.Pages.SettingsPage"
              Title="Settings">
 
@@ -25,28 +26,6 @@
         </ScrollView>
 
         <!-- Navigation Bar -->
-        <Grid Grid.Row="2" 
-              ColumnDefinitions="*,*,*" 
-              BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1E}"
-              Padding="10">
-            
-            <Button Grid.Column="0"
-                    Text="🏠 Dashboard"
-                    Clicked="OnDashboardClicked"
-                    BackgroundColor="Transparent"
-                    TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
-
-            <Button Grid.Column="1"
-                    Text="🗺️ Map View"
-                    Clicked="OnMapViewClicked"
-                    BackgroundColor="Transparent"
-                    TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
-
-            <Button Grid.Column="2"
-                    Text="⚙️ Settings"
-                    Clicked="OnSettingsClicked"
-                    BackgroundColor="Transparent"
-                    TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
-        </Grid>
+        <admin:AdminNavigationBar Grid.Row="2" />
     </Grid>
 </ContentPage> 

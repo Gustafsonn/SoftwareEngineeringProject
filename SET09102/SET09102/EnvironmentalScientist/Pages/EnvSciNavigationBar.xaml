@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SET09102.EnvironmentalScientist.Pages.EnvSciNavigationBar">
+
+    <Grid ColumnDefinitions="*,*,*" 
+          BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1E}"
+          Padding="10">
+            
+        <Button Grid.Column="0"
+                Text="🏠 Dashboard"
+                Clicked="OnDashboardClicked"
+                BackgroundColor="Transparent"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+
+        <Button Grid.Column="1"
+                Text="Env Home"
+                Clicked="OnHomeClicked"
+                BackgroundColor="Transparent"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+
+        <Button Grid.Column="2"
+                Text="🗺️ Map"
+                Clicked="OnMapClicked"
+                BackgroundColor="Transparent"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+    </Grid>
+
+</ContentView>
