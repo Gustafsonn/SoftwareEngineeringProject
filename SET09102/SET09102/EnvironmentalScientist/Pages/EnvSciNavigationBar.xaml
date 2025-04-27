@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SET09102.EnvironmentalScientist.Pages.EnvSciNavigationBar">
 
-    <Grid ColumnDefinitions="*,*,*" 
+    <Grid ColumnDefinitions="*,*,*,*" 
           BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1E}"
           Padding="10">
             

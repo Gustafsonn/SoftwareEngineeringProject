@@ -93,6 +93,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Update="EnvironmentalScientist\Pages\**\*.xaml.cs">
+			<DependentUpon>%(Filename)</DependentUpon>
+		</Compile>
+		<MauiXaml Update="EnvironmentalScientist\Pages\**\*.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="OperationsManager\Pages\DataVerificationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

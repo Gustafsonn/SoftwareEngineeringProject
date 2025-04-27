@@ -1,4 +1,7 @@
 using Microsoft.Data.Sqlite;
+using SET09102.Models;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -132,6 +135,13 @@ namespace SET09102.Services
                         notes TEXT,
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (sensor_id) REFERENCES sensors(id)
+                    );
+                    
+                    CREATE TABLE IF NOT EXISTS environmental_data (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        data_type TEXT NOT NULL,
+                        value REAL NOT NULL,
+                        timestamp TEXT NOT NULL
                     );";
 
                 using (var command = new SqliteCommand(createTablesSql, _connection))
@@ -158,7 +168,7 @@ namespace SET09102.Services
                     await connection.OpenAsync();
 
                     // Check if all required tables exist
-                    var tables = new[] { "air_quality", "water_quality", "weather_conditions" };
+                    var tables = new[] { "air_quality", "water_quality", "weather_conditions", "sensors", "sensor_alerts", "sensor_maintenance_logs", "environmental_data" };
                     foreach (var table in tables)
                     {
                         using (var command = new SqliteCommand($"SELECT name FROM sqlite_master WHERE type='table' AND name='{table}'", connection))
@@ -186,12 +196,68 @@ namespace SET09102.Services
 
         public SqliteConnection GetConnection()
         {
-            if (_connection == null)
+            if (_connection == null || _connection.State != System.Data.ConnectionState.Open)
             {
                 _connection = new SqliteConnection($"Data Source={_dbPath}");
                 _connection.Open();
             }
             return _connection;
         }
+
+        // Get environmental data from database
+        public async Task<List<EnvironmentalDataEntity>> GetEnvironmentalDataAsync()
+        {
+            var data = new List<EnvironmentalDataEntity>();
+            
+            using var connection = new SqliteConnection($"Data Source={_dbPath}");
+            await connection.OpenAsync();
+            
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT data_type, value, timestamp FROM environmental_data";
+            
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                data.Add(new EnvironmentalDataEntity
+                {
+                    DataType = reader.GetString(0),
+                    Value = reader.GetDouble(1),
+                    Timestamp = reader.GetString(2)
+                });
+            }
+            
+            return data;
+        }
+        
+        // Add method to save environmental data
+        public async Task SaveEnvironmentalDataAsync(EnvironmentalDataEntity data)
+        {
+            using var connection = new SqliteConnection($"Data Source={_dbPath}");
+            await connection.OpenAsync();
+            
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                INSERT INTO environmental_data (data_type, value, timestamp)
+                VALUES ($dataType, $value, $timestamp)";
+            
+            command.Parameters.AddWithValue("$dataType", data.DataType);
+            command.Parameters.AddWithValue("$value", data.Value);
+            command.Parameters.AddWithValue("$timestamp", data.Timestamp);
+            
+            await command.ExecuteNonQueryAsync();
+        }
     }
-} 
+}
+
+// EnvironmentalDataEntity.cs
+namespace SET09102.Models
+{
+    // Rename this class to avoid confusion with the ViewModel
+    public class EnvironmentalDataEntity
+    {
+        // Initialize properties with default values to avoid null reference issues
+        public string DataType { get; set; } = string.Empty;
+        public double Value { get; set; }
+        public string Timestamp { get; set; } = string.Empty;
+    }
+}
