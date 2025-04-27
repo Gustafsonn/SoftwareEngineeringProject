@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:env="clr-namespace:SET09102.EnvironmentalScientist.Pages"
+             x:Class="SET09102.EnvironmentalScientist.Pages.HistoricalDataPage"
+             Title="Historical Data Analysis">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Margin="20,10">
+            <Label Text="Historical Environmental Data" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+            
+            <Label Text="Select parameters to view and analyze data" 
+                   FontSize="16" 
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
+                   
+            <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto" Margin="0,10">
+                <Label Text="Data Type:" VerticalOptions="Center" Grid.Column="0" Grid.Row="0" />
+                <Picker x:Name="DataTypePicker" 
+                        Grid.Column="0" 
+                        Grid.Row="1"
+                        SelectedIndexChanged="OnDataTypeChanged">
+                    <Picker.Items>
+                        <x:String>Air Quality</x:String>
+                        <x:String>Water Quality</x:String>
+                        <x:String>Weather</x:String>
+                    </Picker.Items>
+                </Picker>
+                
+                <Label Text="Start Date:" VerticalOptions="Center" Grid.Column="1" Grid.Row="0" />
+                <DatePicker x:Name="StartDatePicker" 
+                            Grid.Column="1" 
+                            Grid.Row="1"
+                            DateSelected="OnDateRangeChanged" />
+                
+                <Label Text="End Date:" VerticalOptions="Center" Grid.Column="2" Grid.Row="0" />
+                <DatePicker x:Name="EndDatePicker" 
+                            Grid.Column="2" 
+                            Grid.Row="1"
+                            DateSelected="OnDateRangeChanged" />
+            </Grid>
+        </VerticalStackLayout>
+        
+        <!-- Data Display -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*" Margin="20,0">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+                <Label Text="Results:" FontSize="18" FontAttributes="Bold" VerticalOptions="Center" />
+                <Picker x:Name="MetricPicker" 
+                        Grid.Column="1" 
+                        WidthRequest="200"
+                        SelectedIndexChanged="OnMetricChanged"
+                        IsVisible="{Binding HasData}" />
+            </Grid>
+            
+            <Grid Grid.Row="1" RowDefinitions="*,Auto">
+                <!-- Statistics Panel -->
+                <ScrollView Grid.Row="0">
+                    <VerticalStackLayout>
+                        <!-- Empty State -->
+                        <Label x:Name="NoDataLabel" 
+                               Text="Select parameters above to view historical data" 
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center"
+                               IsVisible="True"
+                               Margin="0,50,0,0"/>
+                        
+                        <!-- Data Statistics Panel -->
+                        <Grid x:Name="StatsPanel" IsVisible="False" Margin="0,10">
+                            <Frame BorderColor="LightGray" Padding="10" CornerRadius="5">
+                                <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto,Auto,Auto">
+                                    <Label Text="Summary Statistics" Grid.ColumnSpan="4" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                    
+                                    <Frame Grid.Row="1" Grid.Column="0" BackgroundColor="#f0f8ff" Margin="5" Padding="10">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Average, StringFormat='Average: {0:F2}'}" FontAttributes="Bold"/>
+                                            <Label Text="{Binding CurrentMetric}"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                    
+                                    <Frame Grid.Row="1" Grid.Column="1" BackgroundColor="#f0fff0" Margin="5" Padding="10">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Minimum, StringFormat='Minimum: {0:F2}'}" FontAttributes="Bold"/>
+                                            <Label Text="{Binding CurrentMetric}"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                    
+                                    <Frame Grid.Row="1" Grid.Column="2" BackgroundColor="#fff0f0" Margin="5" Padding="10">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Maximum, StringFormat='Maximum: {0:F2}'}" FontAttributes="Bold"/>
+                                            <Label Text="{Binding CurrentMetric}"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                    
+                                    <Frame Grid.Row="1" Grid.Column="3" BackgroundColor="#fffdf0" Margin="5" Padding="10">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding DataPoints, StringFormat='Data Points: {0}'}" FontAttributes="Bold"/>
+                                            <Label Text="readings"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                    
+                                    <Frame Grid.Row="2" Grid.ColumnSpan="4" BackgroundColor="#f5f5f5" Margin="5" Padding="10">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding TrendMessage}" FontAttributes="Bold"/>
+                                            <Label Text="{Binding TrendDetail}"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                        
+                        <!-- Data Collection View -->
+                        <CollectionView x:Name="DataCollectionView" 
+                                        ItemsSource="{Binding HistoricalData}"
+                                        IsVisible="{Binding HasData}"
+                                        SelectionMode="Single"
+                                        SelectionChanged="OnDataItemSelected"
+                                        Margin="0,10">
+                            <CollectionView.Header>
+                                <Grid ColumnDefinitions="*,*,*,*" BackgroundColor="LightGray" Padding="10">
+                                    <Label Text="Date/Time" Grid.Column="0" FontAttributes="Bold"/>
+                                    <Label Text="Location" Grid.Column="1" FontAttributes="Bold"/>
+                                    <Label Text="Value" Grid.Column="2" FontAttributes="Bold"/>
+                                    <Label Text="Status" Grid.Column="3" FontAttributes="Bold"/>
+                                </Grid>
+                            </CollectionView.Header>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="*,*,*,*" Padding="10">
+                                        <Label Text="{Binding Timestamp, StringFormat='{0:g}'}" Grid.Column="0" />
+                                        <Label Text="{Binding Location}" Grid.Column="1" />
+                                        <Label Text="{Binding Value, StringFormat='{0:F2} {1}'}" Grid.Column="2" />
+                                        <Label Text="{Binding Status}" Grid.Column="3">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Normal">
+                                                    <Setter Property="TextColor" Value="Green" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Warning">
+                                                    <Setter Property="TextColor" Value="Orange" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Danger">
+                                                    <Setter Property="TextColor" Value="Red" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Caution">
+                                                    <Setter Property="TextColor" Value="Orange" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Good">
+                                                    <Setter Property="TextColor" Value="Green" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="Moderate">
+                                                    <Setter Property="TextColor" Value="Orange" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="High">
+                                                    <Setter Property="TextColor" Value="Red" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </ScrollView>
+                
+                <!-- Export/Save Button -->
+                <Button Grid.Row="1" 
+                        Text="Export Data" 
+                        IsVisible="{Binding HasData}"
+                        HorizontalOptions="End"
+                        Clicked="OnExportDataClicked"
+                        Margin="0,10,0,0"/>
+            </Grid>
+        </Grid>
+        
+        <!-- Navigation Bar -->
+        <env:EnvSciNavigationBar Grid.Row="2" />
+    </Grid>
+</ContentPage>

@@ -23,8 +23,8 @@ namespace SET09102
             Routing.RegisterRoute("//OperationsManager/DataVerificationPage", typeof(OperationsManager.Pages.DataVerificationPage));
             Routing.RegisterRoute("//EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));
             Routing.RegisterRoute("//EnvironmentalScientist/MapPage", typeof(EnvironmentalScientist.Pages.MapPage));
+            Routing.RegisterRoute("//EnvironmentalScientist/HistoricalData", typeof(EnvironmentalScientist.Pages.HistoricalDataPage));
 
-            // Subscribe to navigating event to check authentication
             Navigating += OnNavigating;
         }
 
@@ -32,17 +32,13 @@ namespace SET09102
         {
             if (e.Target.Location.ToString().StartsWith("//Administrator/"))
             {
-                // Allow navigation to login page
                 if (e.Target.Location.ToString() == "//Administrator/Login")
                     return;
 
-                // Check if user is authenticated
                 bool isAuthenticated = await _authService.IsAuthenticatedAsync();
                 if (!isAuthenticated)
                 {
-                    // Cancel the current navigation
                     e.Cancel();
-                    // Redirect to login page
                     await Shell.Current.GoToAsync("//Administrator/Login");
                 }
             }

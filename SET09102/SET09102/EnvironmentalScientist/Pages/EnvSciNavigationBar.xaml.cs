@@ -23,5 +23,10 @@ namespace SET09102.EnvironmentalScientist.Pages
         {
             await Shell.Current.GoToAsync("//EnvironmentalScientist/MapPage");
         }
+        
+        private async void OnHistoricalDataClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//EnvironmentalScientist/HistoricalData");
+        }
     }
 }
