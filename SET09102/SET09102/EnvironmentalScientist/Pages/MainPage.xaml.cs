@@ -9,18 +9,13 @@ public partial class MainPage : ContentPage
         InitializeComponent();
     }
 
-    private async void OnDashboardClicked(object sender, EventArgs e)
+    private async void OnHistoricalDataClicked(object sender, EventArgs e)
     {
-        // Already on dashboard, do nothing
+        await Shell.Current.GoToAsync("//EnvironmentalScientist/HistoricalData");
     }
 
     private async void OnMapViewClicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync("//EnvironmentalScientist/MapPage");
     }
-
-    private async void OnSettingsClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//EnvironmentalScientist/SettingsPage");
-    }
-} 
+}

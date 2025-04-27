@@ -8,19 +8,8 @@
        x:Class="SET09102.AppShell">
     
     <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="Home" />
-    <ShellContent 
-    Title="Historical Data"
-    ContentTemplate="{DataTemplate env:HistoricalDataPage}"
-    Route="//EnvironmentalScientist/HistoricalData" />
-    
+   
     <FlyoutItem Title="Administrator" Icon="👨‍💼">
-        <ShellContent Route="Administrator/MainPage" ContentTemplate="{DataTemplate admin:MainPage}" />
-    </FlyoutItem>
-    
-    <FlyoutItem Title="Operations Manager" Icon="👨‍💼">
-        <ShellContent Route="OperationsManager/MainPage" ContentTemplate="{DataTemplate ops:MainPage}" />
-
-    <FlyoutItem Title="Administrator">
         <ShellContent
             Title="Login"
             ContentTemplate="{DataTemplate admin:LoginPage}"
@@ -32,13 +21,42 @@
             Route="//Administrator/Dashboard" />
             
         <ShellContent
+            Title="Data Storage"
+            ContentTemplate="{DataTemplate admin:DataStoragePage}"
+            Route="//Administrator/DataStoragePage" />
+            
+        <ShellContent
             Title="Settings"
             ContentTemplate="{DataTemplate admin:SettingsPage}"
             Route="//Administrator/SettingsPage" />
     </FlyoutItem>
     
+    <FlyoutItem Title="Operations Manager" Icon="👨‍💼">
+        <ShellContent 
+            Title="Dashboard"
+            ContentTemplate="{DataTemplate ops:MainPage}" 
+            Route="//OperationsManager/MainPage" />
+            
+        <ShellContent 
+            Title="Data Verification"
+            ContentTemplate="{DataTemplate ops:DataVerificationPage}" 
+            Route="//OperationsManager/DataVerificationPage" />
+    </FlyoutItem>
+    
     <FlyoutItem Title="Environmental Scientist" Icon="👨‍🔬">
-        <ShellContent Route="EnvironmentalScientist/MainPage" ContentTemplate="{DataTemplate env:MainPage}" />
-        <ShellContent Route="EnvironmentalScientist/HistoricalData" ContentTemplate="{DataTemplate env:HistoricalDataPage}" />
+        <ShellContent 
+            Title="Dashboard"
+            ContentTemplate="{DataTemplate env:MainPage}" 
+            Route="//EnvironmentalScientist/MainPage" />
+            
+        <ShellContent 
+            Title="Map View"
+            ContentTemplate="{DataTemplate env:MapPage}" 
+            Route="//EnvironmentalScientist/MapPage" />
+            
+        <ShellContent 
+            Title="Historical Data"
+            ContentTemplate="{DataTemplate env:HistoricalDataPage}" 
+            Route="//EnvironmentalScientist/HistoricalData" />
     </FlyoutItem>
 </Shell>

@@ -13,14 +13,47 @@
                Margin="0,20,0,20"/>
 
         <!-- Content -->
-        <VerticalStackLayout Grid.Row="1">
-            <Label Text="Hello Environmental Scientist" 
+        <VerticalStackLayout Grid.Row="1" Spacing="20" Padding="20">
+            <Label Text="Welcome, Environmental Scientist" 
                    HorizontalOptions="Center" 
-                   VerticalOptions="Center" 
-                   FontSize="24"/>
+                   FontSize="20"
+                   Margin="0,0,0,20"/>
+
+            <!-- Dashboard Quick Links -->
+            <Frame BackgroundColor="{AppThemeBinding Light=#f5f5f5, Dark=#2D2D30}" 
+                   Padding="15" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Data Analysis Tools" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#333333, Dark=#FFFFFF}"/>
+
+                    <Grid ColumnDefinitions="*,*" RowSpacing="15" ColumnSpacing="15">
+                        <!-- Historical Data Analysis -->
+                        <Frame Grid.Column="0" 
+                               BackgroundColor="{AppThemeBinding Light=#2b5797, Dark=#1E3F6D}" 
+                               Padding="10" CornerRadius="5">
+                            <Button Text="Historical Data Analysis"
+                                    Clicked="OnHistoricalDataClicked"
+                                    BackgroundColor="Transparent"
+                                    TextColor="White"/>
+                        </Frame>
+
+                        <!-- Map View -->
+                        <Frame Grid.Column="1" 
+                               BackgroundColor="{AppThemeBinding Light=#00a300, Dark=#006B00}" 
+                               Padding="10" CornerRadius="5">
+                            <Button Text="Map View"
+                                    Clicked="OnMapViewClicked"
+                                    BackgroundColor="Transparent"
+                                    TextColor="White"/>
+                        </Frame>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
         </VerticalStackLayout>
 
         <!-- Navigation Bar -->
         <env:EnvSciNavigationBar Grid.Row="2" />
     </Grid>
-</ContentPage> 
+</ContentPage>
