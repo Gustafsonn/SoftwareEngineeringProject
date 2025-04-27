@@ -19,9 +19,14 @@
 
     <FlyoutItem Title="Administrator">
         <ShellContent
-            Title="Administrator"
+            Title="Login"
+            ContentTemplate="{DataTemplate admin:LoginPage}"
+            Route="//Administrator/Login" />
+            
+        <ShellContent
+            Title="Dashboard"
             ContentTemplate="{DataTemplate admin:MainPage}"
-            Route="//Administrator/MainPage" />
+            Route="//Administrator/Dashboard" />
             
         <ShellContent
             Title="Settings"

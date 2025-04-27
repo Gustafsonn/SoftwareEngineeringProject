@@ -7,23 +7,23 @@ public partial class App : Application
 {
     private readonly DatabaseService _databaseService;
     private readonly DataImportService _dataImportService;
-    private AppShell? _shell;
+    private readonly AppShell _shell;
 
-    public App(DatabaseService databaseService, DataImportService dataImportService)
+    public App(DatabaseService databaseService, DataImportService dataImportService, AppShell shell)
     {
         InitializeComponent();
         _databaseService = databaseService;
         _dataImportService = dataImportService;
+        _shell = shell;
 
         // Initialize SQLite
         SQLitePCL.Batteries_V2.Init();
 
-        _shell = new AppShell();
         MainPage = _shell;
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(_shell ?? new AppShell());
+        return new Window(_shell);
     }
 }
