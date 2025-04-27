@@ -19,6 +19,7 @@ namespace SET09102
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<DataImportService>();
             builder.Services.AddSingleton<SensorService>();
+            builder.Services.AddSingleton<ISensorConfigurationService, MockSensorConfigurationService>();
 
             return builder.Build();
         }

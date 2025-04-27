@@ -14,19 +14,29 @@
         <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate local:MainPage}"
-            Route="//MainPage" />
+            Route="MainPage" />
     </FlyoutItem>
 
     <FlyoutItem Title="Administrator">
         <ShellContent
             Title="Administrator"
             ContentTemplate="{DataTemplate admin:MainPage}"
-            Route="//Administrator/MainPage" />
+            Route="AdminMainPage" />
             
+        <ShellContent
+            Title="Sensor Configuration"
+            ContentTemplate="{DataTemplate admin:SensorConfigurationPage}"
+            Route="SensorConfigurationPage" />
+
         <ShellContent
             Title="Settings"
             ContentTemplate="{DataTemplate admin:SettingsPage}"
-            Route="//Administrator/SettingsPage" />
+            Route="SettingsPage" />
+
+        <ShellContent
+            Title="Data Storage"
+            ContentTemplate="{DataTemplate admin:DataStoragePage}"
+            Route="DataStoragePage" />
     </FlyoutItem>
 
     <FlyoutItem Title="Operations Manager">

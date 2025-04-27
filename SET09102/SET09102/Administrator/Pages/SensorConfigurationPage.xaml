@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SET09102.Administrator.Pages.SensorConfigurationPage"
+             Title="Sensor Configuration">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="15">
+            <!-- Sensor Selection -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Select Sensor" FontSize="18" FontAttributes="Bold"/>
+                    <Picker x:Name="SensorPicker" Title="Select a sensor" SelectedIndexChanged="OnSensorSelected"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Current Configuration -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Current Configuration" FontSize="18" FontAttributes="Bold"/>
+                    <Label x:Name="CurrentFirmwareLabel" Text="Firmware Version: --"/>
+                    <Label x:Name="CurrentConfigLabel" Text="Configuration: --"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Configuration Update -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Update Configuration" FontSize="18" FontAttributes="Bold"/>
+                    <Entry x:Name="PollingIntervalEntry" Placeholder="Polling Interval (seconds)"/>
+                    <Entry x:Name="ThresholdEntry" Placeholder="Alert Threshold"/>
+                    <Button x:Name="UpdateConfigButton" Text="Update Configuration" Clicked="OnUpdateConfigClicked"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Firmware Update -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Firmware Update" FontSize="18" FontAttributes="Bold"/>
+                    <Button x:Name="CheckUpdatesButton" Text="Check for Updates" Clicked="OnCheckUpdatesClicked"/>
+                    <Button x:Name="UpdateFirmwareButton" Text="Update Firmware" Clicked="OnUpdateFirmwareClicked" IsEnabled="False"/>
+                    <ProgressBar x:Name="UpdateProgress" IsVisible="False"/>
+                    <Label x:Name="UpdateStatusLabel" Text="" IsVisible="False"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage> 

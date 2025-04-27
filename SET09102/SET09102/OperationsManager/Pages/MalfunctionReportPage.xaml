@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ops="clr-namespace:SET09102.OperationsManager.Pages"
+             x:Class="SET09102.OperationsManager.Pages.MalfunctionReportPage"
+             Title="Malfunction Reports">
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        <VerticalStackLayout Grid.Row="0" Spacing="10" Padding="10">
+            <Label Text="Sensor Malfunction Reports" 
+                   FontSize="24" 
+                   HorizontalOptions="Center"/>
+            
+            <Button Text="Report New Malfunction" 
+                    Clicked="OnReportMalfunctionClicked"
+                    HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <CollectionView Grid.Row="1" 
+                      x:Name="MalfunctionCollection"
+                      ItemsSource="{Binding Malfunctions}"
+                      SelectionMode="Single"
+                      SelectionChanged="OnMalfunctionSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding SensorName}" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Description}"/>
+                            <Label Text="{Binding DetectedTime, StringFormat='Detected: {0:g}'}"/>
+                            <Label Text="{Binding Severity}" 
+                                   TextColor="{Binding Severity, Converter={StaticResource SeverityToColorConverter}}"/>
+                            <Label Text="{Binding Status}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <ops:OpsManagerNavigationBar Grid.Row="2" />
+    </Grid>
+</ContentPage> 
