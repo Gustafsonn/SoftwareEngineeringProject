@@ -15,8 +15,8 @@
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
 
         <Button Grid.Column="1"
-                Text="Admin Home"
-                Clicked="OnHomeClicked"
+                Text="Sensor Config"
+                Clicked="OnSensorConfigClicked"
                 BackgroundColor="Transparent"
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
         

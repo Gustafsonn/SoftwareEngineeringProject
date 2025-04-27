@@ -19,6 +19,7 @@ namespace SET09102
             Routing.RegisterRoute("//Administrator/Dashboard", typeof(Administrator.Pages.MainPage));
             Routing.RegisterRoute("//Administrator/DataStoragePage", typeof(Administrator.Pages.DataStoragePage));
             Routing.RegisterRoute("//Administrator/SettingsPage", typeof(Administrator.Pages.SettingsPage));
+            Routing.RegisterRoute("//Administrator/SensorConfigurationPage", typeof(Administrator.Pages.SensorConfigurationPage));
             Routing.RegisterRoute("//OperationsManager/MainPage", typeof(OperationsManager.Pages.MainPage));
             Routing.RegisterRoute("//OperationsManager/DataVerificationPage", typeof(OperationsManager.Pages.DataVerificationPage));
             Routing.RegisterRoute("//EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));

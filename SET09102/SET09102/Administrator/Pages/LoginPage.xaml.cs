@@ -5,8 +5,8 @@ namespace SET09102.Administrator.Pages
     public partial class LoginPage : ContentPage
     {
         private readonly IAuthService _authService;
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string Username { get; set; } //= "admin";
+        public string Password { get; set; } //= "admin123";
 
         public LoginPage(IAuthService authService)
         {
