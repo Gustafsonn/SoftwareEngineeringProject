@@ -35,7 +35,7 @@
             <Frame BorderColor="Gray" Padding="10">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="Location" FontSize="16" FontAttributes="Bold"/>
-                    <Picker x:Name="LocationPicker" Title="Select Location" />
+                    <Picker x:Name="LocationPicker" Title="Select Sensor" />
                 </VerticalStackLayout>
             </Frame>
 
