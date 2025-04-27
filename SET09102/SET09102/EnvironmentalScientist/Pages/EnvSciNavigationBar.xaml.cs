@@ -28,5 +28,10 @@ namespace SET09102.EnvironmentalScientist.Pages
         {
             await Shell.Current.GoToAsync("//EnvironmentalScientist/HistoricalData");
         }
+
+        private async void OnTrendClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//EnvironmentalScientist/EnvTrendPage");
+        }
     }
 }
