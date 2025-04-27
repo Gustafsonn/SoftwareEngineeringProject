@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:SET09102.Converters"
+             x:Class="SET09102.OperationsManager.Pages.SensorStatusPage"
+             Title="Sensor Status">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StatusToColorConverter x:Key="StatusToColorConverter" />
+            <converters:StatusToTextColorConverter x:Key="StatusToTextColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" 
+               Text="Sensor Status Overview" 
+               FontSize="24" 
+               HorizontalOptions="Center" 
+               Margin="0,10" />
+
+        <HorizontalStackLayout Grid.Row="1" 
+                               Margin="10">
+            <Label Text="Show Issues Only:" 
+                   VerticalOptions="Center" />
+            <Switch IsToggled="{Binding ShowIssuesOnly, Mode=TwoWay}" />
+            <Button Text="Refresh" 
+                    Command="{Binding RefreshCommand}" 
+                    HorizontalOptions="EndAndExpand" />
+        </HorizontalStackLayout>
+
+        <CollectionView Grid.Row="2" 
+                        ItemsSource="{Binding Sensors}"
+                        Margin="10">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="5" Padding="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding Sensor.Name}"
+                                   FontSize="18"
+                                   FontAttributes="Bold" />
+                            <Label Grid.Row="0" Grid.Column="1"
+                                   Text="{Binding Sensor.Status}"
+                                   FontSize="16"
+                                   TextColor="{Binding Sensor.Status, Converter={StaticResource StatusToTextColorConverter}}"
+                                   BackgroundColor="{Binding Sensor.Status, Converter={StaticResource StatusToColorConverter}}"
+                                   Padding="5"
+                                   HorizontalOptions="End" />
+                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                   Text="{Binding Sensor.Location}" />
+                            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                   Text="Active Alerts:" />
+                            <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                   Text="{Binding ActiveAlerts.Count, StringFormat='Count: {0}'}" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <ActivityIndicator Grid.Row="0" Grid.RowSpan="3"
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           Color="Blue"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+    </Grid>
+</ContentPage>

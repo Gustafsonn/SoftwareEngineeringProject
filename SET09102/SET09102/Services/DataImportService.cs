@@ -8,12 +8,12 @@ namespace SET09102.Services
         private readonly DatabaseService _databaseService;
         private readonly string _basePath;
 
-        public DataImportService(DatabaseService databaseService)
-        {
-            _databaseService = databaseService;
-            _basePath = AppDomain.CurrentDomain.BaseDirectory;
-        }
-
+public DataImportService(DatabaseService databaseService)
+{
+    _databaseService = databaseService;
+    // Use FileSystem.AppDataDirectory or a more reliable path
+    _basePath = FileSystem.AppDataDirectory;
+}
         public async Task ImportSampleDataAsync()
         {
             try

@@ -6,57 +6,64 @@
        xmlns:ops="clr-namespace:SET09102.OperationsManager.Pages"
        xmlns:env="clr-namespace:SET09102.EnvironmentalScientist.Pages"
        x:Class="SET09102.AppShell">
-    
-    <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="Home" />
-   
-    <FlyoutItem Title="Administrator" Icon="👨‍💼">
+
+    <ShellContent ContentTemplate="{DataTemplate local:MainPage}"
+            Route="Home"/>
+
+    <FlyoutItem Title="Administrator"
+            Icon="👨‍💼">
         <ShellContent
             Title="Login"
             ContentTemplate="{DataTemplate admin:LoginPage}"
-            Route="//Administrator/Login" />
-            
+            Route="//Administrator/Login"/>
+
         <ShellContent
             Title="Dashboard"
             ContentTemplate="{DataTemplate admin:MainPage}"
-            Route="//Administrator/Dashboard" />
-            
+            Route="//Administrator/Dashboard"/>
+
         <ShellContent
             Title="Data Storage"
             ContentTemplate="{DataTemplate admin:DataStoragePage}"
-            Route="//Administrator/DataStoragePage" />
-            
+            Route="//Administrator/DataStoragePage"/>
+
         <ShellContent
             Title="Settings"
             ContentTemplate="{DataTemplate admin:SettingsPage}"
-            Route="//Administrator/SettingsPage" />
+            Route="//Administrator/SettingsPage"/>
     </FlyoutItem>
-    
-    <FlyoutItem Title="Operations Manager" Icon="👨‍💼">
-        <ShellContent 
+
+    <FlyoutItem Title="Operations Manager"
+            Icon="👨‍💼">
+        <ShellContent
             Title="Dashboard"
-            ContentTemplate="{DataTemplate ops:MainPage}" 
-            Route="//OperationsManager/MainPage" />
-            
-        <ShellContent 
+            ContentTemplate="{DataTemplate ops:MainPage}"
+            Route="//OperationsManager/MainPage"/>
+
+        <ShellContent Route="OperationsManager/SensorStatus"
+                ContentTemplate="{DataTemplate ops:SensorStatusPage}"/>
+
+        <ShellContent
             Title="Data Verification"
-            ContentTemplate="{DataTemplate ops:DataVerificationPage}" 
-            Route="//OperationsManager/DataVerificationPage" />
+            ContentTemplate="{DataTemplate ops:DataVerificationPage}"
+            Route="//OperationsManager/DataVerificationPage"/>
     </FlyoutItem>
-    
-    <FlyoutItem Title="Environmental Scientist" Icon="👨‍🔬">
-        <ShellContent 
+
+    <FlyoutItem Title="Environmental Scientist"
+            Icon="👨‍🔬">
+        <ShellContent
             Title="Dashboard"
-            ContentTemplate="{DataTemplate env:MainPage}" 
-            Route="//EnvironmentalScientist/MainPage" />
-            
-        <ShellContent 
+            ContentTemplate="{DataTemplate env:MainPage}"
+            Route="//EnvironmentalScientist/MainPage"/>
+
+        <ShellContent
             Title="Map View"
-            ContentTemplate="{DataTemplate env:MapPage}" 
-            Route="//EnvironmentalScientist/MapPage" />
-            
-        <ShellContent 
+            ContentTemplate="{DataTemplate env:MapPage}"
+            Route="//EnvironmentalScientist/MapPage"/>
+
+        <ShellContent
             Title="Historical Data"
-            ContentTemplate="{DataTemplate env:HistoricalDataPage}" 
-            Route="//EnvironmentalScientist/HistoricalData" />
+            ContentTemplate="{DataTemplate env:HistoricalDataPage}"
+            Route="//EnvironmentalScientist/HistoricalData"/>
     </FlyoutItem>
 </Shell>
