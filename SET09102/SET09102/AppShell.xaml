@@ -8,6 +8,10 @@
        x:Class="SET09102.AppShell">
     
     <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="Home" />
+    <ShellContent 
+    Title="Historical Data"
+    ContentTemplate="{DataTemplate env:HistoricalDataPage}"
+    Route="//EnvironmentalScientist/HistoricalData" />
     
     <FlyoutItem Title="Administrator" Icon="👨‍💼">
         <ShellContent Route="Administrator/MainPage" ContentTemplate="{DataTemplate admin:MainPage}" />
