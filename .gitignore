@@ -26,3 +26,6 @@ SET09102/.vs
 **/bin/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
+SET09102/SET09102/SET09102.csproj.user
+.DS_Store
+/SET09102/.DS_Store
