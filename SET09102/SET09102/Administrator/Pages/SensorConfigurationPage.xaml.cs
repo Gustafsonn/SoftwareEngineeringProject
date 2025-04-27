@@ -42,7 +42,7 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
             {
                 var newVersion = UpdateFirmwareVersion(sensor.FirmwareVersion);
                 await _sensorService.UpdateFirmware(sensor.Id, newVersion);
-                await LoadSensorsAsync();
+                sensor.FirmwareVersion = newVersion;
                 await DisplayAlert("Updated Firmware", $"Updated firmware for sensor {sensor.Name} (ID: {sensor.Id}) to '{newVersion}'.", "OK");               
             }
             catch (Exception ex)
@@ -78,7 +78,7 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
                 if (string.IsNullOrEmpty(newLocation)) return;
 
                 await _sensorService.UpdateLocation(sensor.Id, newLocation);
-                await LoadSensorsAsync();
+                sensor.Location = newLocation;
                 await DisplayAlert("Updated Configuration", $"Updated location configuration for sensor {sensor.Name} (ID: {sensor.Id}) to '{newLocation}'.", "OK");
             }
             catch (Exception ex)
