@@ -11,7 +11,7 @@ namespace SET09102.Administrator.Pages
     public partial class SensorConfigurationPage : ContentPage
     {
         private readonly ISensorConfigurationService _sensorService;
-        private Sensor _selectedSensor;
+        private Sensor? _selectedSensor;
         private bool _isLoading;
 
         public SensorConfigurationPage(ISensorConfigurationService sensorService)
