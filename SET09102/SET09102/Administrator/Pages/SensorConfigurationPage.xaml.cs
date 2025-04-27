@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using SET09102.Models;
@@ -12,59 +11,30 @@ namespace SET09102.Administrator.Pages
     {
         private readonly ISensorConfigurationService _sensorService;
         private Sensor _selectedSensor;
-        private bool _isLoading;
 
         public SensorConfigurationPage(ISensorConfigurationService sensorService)
         {
             InitializeComponent();
             _sensorService = sensorService;
-            _ = InitializeAsync();
+            LoadSensors();
         }
 
-        private async Task InitializeAsync()
-        {
-            try
-            {
-                _isLoading = true;
-                await LoadSensors();
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Failed to initialize: {ex.Message}", "OK");
-            }
-            finally
-            {
-                _isLoading = false;
-            }
-        }
-
-        private async Task LoadSensors()
+        private async void LoadSensors()
         {
             try
             {
                 var sensors = await _sensorService.GetAllSensorsAsync();
-                var sensorList = sensors?.ToList();
-                
-                if (sensorList == null || !sensorList.Any())
-                {
-                    await DisplayAlert("Information", "No sensors found", "OK");
-                    return;
-                }
-
-                SensorPicker.ItemsSource = sensorList;
+                SensorPicker.ItemsSource = sensors;
                 SensorPicker.ItemDisplayBinding = new Binding("Name");
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"Failed to load sensors: {ex.Message}", "OK");
-                throw; // Re-throw to be handled by InitializeAsync
             }
         }
 
         private async void OnSensorSelected(object sender, EventArgs e)
         {
-            if (_isLoading) return;
-            
             if (SensorPicker.SelectedItem is Sensor sensor)
             {
                 _selectedSensor = sensor;
@@ -77,12 +47,6 @@ namespace SET09102.Administrator.Pages
             try
             {
                 var config = await _sensorService.GetSensorConfigurationAsync(_selectedSensor.Id);
-                if (config == null)
-                {
-                    await DisplayAlert("Error", "Failed to load sensor configuration", "OK");
-                    return;
-                }
-
                 CurrentFirmwareLabel.Text = $"Firmware Version: {config.FirmwareVersion}";
                 CurrentConfigLabel.Text = $"Configuration: Polling Interval - {config.PollingInterval}s, Threshold - {config.AlertThreshold}";
             }
@@ -94,8 +58,6 @@ namespace SET09102.Administrator.Pages
 
         private async void OnUpdateConfigClicked(object sender, EventArgs e)
         {
-            if (_isLoading) return;
-            
             if (_selectedSensor == null)
             {
                 await DisplayAlert("Error", "Please select a sensor first", "OK");
@@ -108,12 +70,6 @@ namespace SET09102.Administrator.Pages
                     !double.TryParse(ThresholdEntry.Text, out double threshold))
                 {
                     await DisplayAlert("Error", "Please enter valid numbers", "OK");
-                    return;
-                }
-
-                if (pollingInterval <= 0)
-                {
-                    await DisplayAlert("Error", "Polling interval must be greater than 0", "OK");
                     return;
                 }
 
@@ -135,8 +91,6 @@ namespace SET09102.Administrator.Pages
 
         private async void OnCheckUpdatesClicked(object sender, EventArgs e)
         {
-            if (_isLoading) return;
-            
             if (_selectedSensor == null)
             {
                 await DisplayAlert("Error", "Please select a sensor first", "OK");
@@ -158,8 +112,6 @@ namespace SET09102.Administrator.Pages
 
         private async void OnUpdateFirmwareClicked(object sender, EventArgs e)
         {
-            if (_isLoading) return;
-            
             if (_selectedSensor == null)
             {
                 await DisplayAlert("Error", "Please select a sensor first", "OK");
@@ -168,18 +120,13 @@ namespace SET09102.Administrator.Pages
 
             try
             {
-                _isLoading = true;
                 UpdateProgress.IsVisible = true;
                 UpdateStatusLabel.Text = "Updating firmware...";
                 UpdateFirmwareButton.IsEnabled = false;
 
                 await _sensorService.UpdateFirmwareAsync(_selectedSensor.Id, progress =>
                 {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        UpdateProgress.Progress = progress;
-                        UpdateStatusLabel.Text = $"Updating firmware... {progress:P0}";
-                    });
+                    UpdateProgress.Progress = progress;
                 });
 
                 UpdateStatusLabel.Text = "Firmware updated successfully!";
@@ -192,7 +139,6 @@ namespace SET09102.Administrator.Pages
             }
             finally
             {
-                _isLoading = false;
                 UpdateProgress.IsVisible = false;
                 UpdateFirmwareButton.IsEnabled = true;
             }
