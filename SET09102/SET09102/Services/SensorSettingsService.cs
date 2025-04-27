@@ -4,17 +4,36 @@ using System.Text.Json;
 
 namespace SET09102.Services
 {
+    /// <summary>
+    /// Service for managing sensor settings and global application settings.
+    /// </summary>
+    /// <remarks>
+    /// This service provides functionality to store, retrieve, and update configuration settings
+    /// for individual sensors as well as application-wide settings.
+    /// </remarks>
     public class SensorSettingsService
     {
         private readonly string _dbPath;
         private readonly DatabaseService _databaseService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SensorSettingsService"/> class.
+        /// </summary>
+        /// <param name="databaseService">The database service to use for data operations.</param>
         public SensorSettingsService(DatabaseService databaseService)
         {
             _databaseService = databaseService;
             _dbPath = databaseService.GetDatabasePath();
         }
 
+        /// <summary>
+        /// Initializes the database tables required for sensor settings.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="Exception">Thrown when there is an error initializing the database tables.</exception>
+        /// <remarks>
+        /// Creates the 'sensor_settings' and 'global_settings' tables if they don't already exist.
+        /// </remarks>
         public async Task InitializeAsync()
         {
             try
@@ -46,6 +65,16 @@ namespace SET09102.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves settings for a specific sensor.
+        /// </summary>
+        /// <param name="sensorId">The ID of the sensor to retrieve settings for.</param>
+        /// <returns>
+        /// A <see cref="SensorSettings"/> object containing the sensor's settings, or default settings if none exist.
+        /// </returns>
+        /// <remarks>
+        /// If there are no settings for the specified sensor, a new <see cref="SensorSettings"/> object with default values is returned.
+        /// </remarks>
         public async Task<SensorSettings> GetSensorSettingsAsync(int sensorId)
         {
             try
@@ -72,6 +101,17 @@ namespace SET09102.Services
             }
         }
 
+        /// <summary>
+        /// Saves settings for a specific sensor.
+        /// </summary>
+        /// <param name="sensorId">The ID of the sensor to save settings for.</param>
+        /// <param name="settings">The settings to save.</param>
+        /// <returns>
+        /// A <see cref="bool"/> indicating whether the operation was successful.
+        /// </returns>
+        /// <remarks>
+        /// If settings already exist for the specified sensor, they will be updated. Otherwise, a new record will be created.
+        /// </remarks>
         public async Task<bool> SaveSensorSettingsAsync(int sensorId, SensorSettings settings)
         {
             try
@@ -100,6 +140,17 @@ namespace SET09102.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves a global application setting by key.
+        /// </summary>
+        /// <param name="key">The key of the setting to retrieve.</param>
+        /// <param name="defaultValue">The default value to return if the setting does not exist.</param>
+        /// <returns>
+        /// The value of the setting, or <paramref name="defaultValue"/> if it does not exist.
+        /// </returns>
+        /// <remarks>
+        /// If the setting does not exist, it will be created with the default value.
+        /// </remarks>
         public async Task<string> GetGlobalSettingAsync(string key, string defaultValue = "")
         {
             try
@@ -126,6 +177,17 @@ namespace SET09102.Services
             }
         }
 
+        /// <summary>
+        /// Sets a global application setting.
+        /// </summary>
+        /// <param name="key">The key of the setting to set.</param>
+        /// <param name="value">The value to set.</param>
+        /// <returns>
+        /// A <see cref="bool"/> indicating whether the operation was successful.
+        /// </returns>
+        /// <remarks>
+        /// If the setting already exists, it will be updated. Otherwise, a new record will be created.
+        /// </remarks>
         public async Task<bool> SetGlobalSettingAsync(string key, string value)
         {
             try
@@ -152,6 +214,18 @@ namespace SET09102.Services
             }
         }
 
+        /// <summary>
+        /// Updates the calibration schedule for multiple sensors.
+        /// </summary>
+        /// <param name="sensorIds">The IDs of the sensors to update.</param>
+        /// <param name="calibrationIntervalDays">The number of days between calibrations.</param>
+        /// <returns>
+        /// A <see cref="bool"/> indicating whether the operation was successful.
+        /// </returns>
+        /// <remarks>
+        /// This method updates both the sensor settings and the next calibration date in the sensors table.
+        /// The operation is performed as a transaction to ensure data consistency.
+        /// </remarks>
         public async Task<bool> UpdateCalibrationScheduleAsync(IEnumerable<int> sensorIds, int calibrationIntervalDays)
         {
             try
