@@ -19,6 +19,22 @@
     
     <FlyoutItem Title="Operations Manager" Icon="👨‍💼">
         <ShellContent Route="OperationsManager/MainPage" ContentTemplate="{DataTemplate ops:MainPage}" />
+
+    <FlyoutItem Title="Administrator">
+        <ShellContent
+            Title="Login"
+            ContentTemplate="{DataTemplate admin:LoginPage}"
+            Route="//Administrator/Login" />
+            
+        <ShellContent
+            Title="Dashboard"
+            ContentTemplate="{DataTemplate admin:MainPage}"
+            Route="//Administrator/Dashboard" />
+            
+        <ShellContent
+            Title="Settings"
+            ContentTemplate="{DataTemplate admin:SettingsPage}"
+            Route="//Administrator/SettingsPage" />
     </FlyoutItem>
     
     <FlyoutItem Title="Environmental Scientist" Icon="👨‍🔬">

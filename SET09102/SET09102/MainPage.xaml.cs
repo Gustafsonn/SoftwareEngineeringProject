@@ -18,7 +18,7 @@ public partial class MainPage : ContentPage
 
     private async void OnAdminClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//Administrator/MainPage");
+        await Shell.Current.GoToAsync("//Administrator/Login");
     }
 
     private async void OnOpsManagerClicked(object sender, EventArgs e)
