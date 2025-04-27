@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:admin="clr-namespace:SET09102.Administrator.Pages"
              x:Class="SET09102.Administrator.Pages.SettingsPage"
-             Title="Settings">
+             Title="Sensor Management">
 
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- Header -->
-        <Label Text="Settings" 
+        <Label Text="Sensor Management" 
                FontSize="24" 
                HorizontalOptions="Center" 
                Margin="0,20,0,20"/>
@@ -15,17 +15,194 @@
         <!-- Main Content -->
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Spacing="20" Padding="20">
-                <Label Text="Administrator Settings"
-                       FontSize="18"
-                       HorizontalOptions="Center"/>
                 
-                <Label Text="Settings options will be added here"
-                       FontSize="16"
-                       HorizontalOptions="Center"/>
+                <!-- Sensor Management Section -->
+                <Frame BorderColor="LightGray" Padding="15" CornerRadius="5">
+                    <VerticalStackLayout>
+                        <Label Text="Sensor List" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               Margin="0,0,0,10"/>
+                               
+                        <!-- Sensor Type Filter -->
+                        <Grid ColumnDefinitions="Auto,*" Margin="0,0,0,10">
+                            <Label Text="Filter by Type:" 
+                                   VerticalOptions="Center"/>
+                            <Picker x:Name="SensorTypePicker" 
+                                    Grid.Column="1" 
+                                    SelectedIndexChanged="OnSensorTypeChanged">
+                                <Picker.Items>
+                                    <x:String>All Types</x:String>
+                                    <x:String>Air Quality</x:String>
+                                    <x:String>Water Quality</x:String>
+                                    <x:String>Weather</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Grid>
+                               
+                        <!-- Sensor List -->
+                        <CollectionView x:Name="SensorListView" 
+                                        SelectionMode="Single" 
+                                        SelectionChanged="OnSensorSelected"
+                                        HeightRequest="300">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="Auto,*,Auto" Padding="5">
+                                        <Grid.Resources>
+                                            <Style TargetType="Label">
+                                                <Setter Property="VerticalOptions" Value="Center" />
+                                            </Style>
+                                        </Grid.Resources>
+                                        
+                                        <Frame Grid.Column="0" 
+                                               WidthRequest="16" 
+                                               HeightRequest="16" 
+                                               CornerRadius="8" 
+                                               Padding="0" 
+                                               Margin="0,0,10,0"
+                                               BackgroundColor="{Binding StatusColor}">
+                                            <Frame.Triggers>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding Status}" Value="operational">
+                                                    <Setter Property="BackgroundColor" Value="Green" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding Status}" Value="maintenance">
+                                                    <Setter Property="BackgroundColor" Value="Orange" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding Status}" Value="offline">
+                                                    <Setter Property="BackgroundColor" Value="Red" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding IsActive}" Value="False">
+                                                    <Setter Property="BackgroundColor" Value="Gray" />
+                                                </DataTrigger>
+                                            </Frame.Triggers>
+                                        </Frame>
+                                        
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                            <Label Text="{Binding Type}" FontSize="12" />
+                                            <Label Text="{Binding Location}" FontSize="12" TextColor="Gray" />
+                                        </VerticalStackLayout>
+                                        
+                                        <Label Grid.Column="2" 
+                                               Text="{Binding StatusText}" 
+                                               FontSize="12" 
+                                               HorizontalOptions="End" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        
+                        <!-- Buttons for Sensors -->
+                        <Grid ColumnDefinitions="*,*,*" Margin="0,10,0,0">
+                            <Button Text="Add Sensor" 
+                                    Grid.Column="0"
+                                    Clicked="OnAddSensorClicked"
+                                    Margin="0,0,5,0" />
+                            <Button Text="Edit" 
+                                    Grid.Column="1"
+                                    Clicked="OnEditSensorClicked"
+                                    Margin="5,0,5,0"
+                                    IsEnabled="{Binding HasSelectedSensor}" />
+                            <Button Text="Update Status" 
+                                    Grid.Column="2"
+                                    Clicked="OnUpdateStatusClicked"
+                                    Margin="5,0,0,0"
+                                    IsEnabled="{Binding HasSelectedSensor}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Sensor Details Section -->
+                <Frame BorderColor="LightGray" Padding="15" CornerRadius="5" IsVisible="{Binding HasSelectedSensor}">
+                    <VerticalStackLayout>
+                        <Label Text="Sensor Details" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               Margin="0,0,0,10"/>
+
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
+                            <Label Text="ID:" Grid.Row="0" Grid.Column="0" />
+                            <Label Text="{Binding SelectedSensor.Id}" Grid.Row="0" Grid.Column="1" />
+                            
+                            <Label Text="Name:" Grid.Row="1" Grid.Column="0" />
+                            <Label Text="{Binding SelectedSensor.Name}" Grid.Row="1" Grid.Column="1" />
+                            
+                            <Label Text="Type:" Grid.Row="2" Grid.Column="0" />
+                            <Label Text="{Binding SelectedSensor.Type}" Grid.Row="2" Grid.Column="1" />
+                            
+                            <Label Text="Status:" Grid.Row="3" Grid.Column="0" />
+                            <Label Text="{Binding SelectedSensor.Status}" Grid.Row="3" Grid.Column="1" />
+                            
+                            <Label Text="Last Calibration:" Grid.Row="4" Grid.Column="0" />
+                            <Label Text="{Binding SelectedSensor.LastCalibration, StringFormat='{0:yyyy-MM-dd}'}" Grid.Row="4" Grid.Column="1" />
+                            
+                            <Label Text="Next Calibration:" Grid.Row="5" Grid.Column="0" />
+                            <Label Text="{Binding SelectedSensor.NextCalibration, StringFormat='{0:yyyy-MM-dd}'}" Grid.Row="5" Grid.Column="1" />
+                            
+                            <Label Text="Firmware Version:" Grid.Row="6" Grid.Column="0" />
+                            <StackLayout Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
+                                <Label Text="{Binding SelectedSensor.FirmwareVersion}" VerticalOptions="Center" />
+                                <Button Text="Update" 
+                                        Clicked="OnUpdateFirmwareClicked" 
+                                        WidthRequest="100" 
+                                        HeightRequest="30" 
+                                        FontSize="12"
+                                        HorizontalOptions="End" />
+                            </StackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- System Settings Section -->
+                <Frame BorderColor="LightGray" Padding="15" CornerRadius="5">
+                    <VerticalStackLayout>
+                        <Label Text="System Settings" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               Margin="0,0,0,10"/>
+                               
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="15">
+                            <Label Text="Data Collection Interval:" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" />
+                            <Picker x:Name="DataIntervalPicker" 
+                                    Grid.Row="0" 
+                                    Grid.Column="1"
+                                    SelectedIndexChanged="OnDataIntervalChanged">
+                                <Picker.Items>
+                                    <x:String>1 minute</x:String>
+                                    <x:String>5 minutes</x:String>
+                                    <x:String>15 minutes</x:String>
+                                    <x:String>30 minutes</x:String>
+                                    <x:String>1 hour</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            
+                            <Label Text="Auto-Calibration:" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" />
+                            <Switch x:Name="AutoCalibrationSwitch" 
+                                    Grid.Row="1" 
+                                    Grid.Column="1"
+                                    IsToggled="true"
+                                    Toggled="OnAutoCalibrationToggled"
+                                    HorizontalOptions="Start" />
+                                    
+                            <Label Text="Alert Notifications:" Grid.Row="2" Grid.Column="0" VerticalOptions="Center" />
+                            <Switch x:Name="AlertNotificationsSwitch" 
+                                    Grid.Row="2" 
+                                    Grid.Column="1"
+                                    IsToggled="true"
+                                    Toggled="OnAlertNotificationsToggled"
+                                    HorizontalOptions="Start" />
+                        </Grid>
+                        
+                        <Button Text="Save Settings"
+                                Clicked="OnSaveSettingsClicked"
+                                HorizontalOptions="End"
+                                Margin="0,20,0,0"/>
+                    </VerticalStackLayout>
+                </Frame>
             </VerticalStackLayout>
         </ScrollView>
 
         <!-- Navigation Bar -->
         <admin:AdminNavigationBar Grid.Row="2" />
     </Grid>
-</ContentPage> 
+</ContentPage>
