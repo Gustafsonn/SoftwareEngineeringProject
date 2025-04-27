@@ -13,10 +13,21 @@ namespace SET09102.EnvironmentalScientist.Pages
         private readonly HistoricalDataViewModel _viewModel;
         private readonly DatabaseService _databaseService;
 
-        public HistoricalDataPage()
+ public HistoricalDataPage()
+    {
+        try
         {
             InitializeComponent();
             _databaseService = new DatabaseService();
+            
+            // Check if database exists before loading data
+            string dbPath = _databaseService.GetDatabasePath();
+            if (!File.Exists(dbPath))
+            {
+                DisplayAlert("Database Not Found", "Please initialize the database from the main page first.", "OK");
+                return;
+            }
+            
             _viewModel = new HistoricalDataViewModel(_databaseService);
             BindingContext = _viewModel;
             
@@ -28,8 +39,15 @@ namespace SET09102.EnvironmentalScientist.Pages
             if (DataTypePicker.SelectedIndex < 0)
                 DataTypePicker.SelectedIndex = 0;
         }
+        catch (Exception ex)
+        {
+            DisplayAlert("Error", $"Failed to initialize Historical Data Page: {ex.Message}", "OK");
+        }
+    }
 
-        protected override void OnAppearing()
+    protected override void OnAppearing()
+    {
+        try
         {
             base.OnAppearing();
             
@@ -39,31 +57,15 @@ namespace SET09102.EnvironmentalScientist.Pages
                 _ = LoadDataAsync();
             }
         }
+        catch (Exception ex)
+        {
+            DisplayAlert("Error", $"Error in OnAppearing: {ex.Message}", "OK");
+        }
+    }
 
-        private async void OnDataTypeChanged(object sender, EventArgs e)
-        {
-            await LoadDataAsync();
-        }
-        
-        private async void OnDateRangeChanged(object sender, DateChangedEventArgs e)
-        {
-            await LoadDataAsync();
-        }
-        
-        private async void OnMetricChanged(object sender, EventArgs e)
-        {
-            if (MetricPicker.SelectedIndex >= 0)
-            {
-                string? metric = MetricPicker.SelectedItem?.ToString();
-                if (metric != null)
-                {
-                    await _viewModel.UpdateSelectedMetricAsync(metric);
-                    StatsPanel.IsVisible = _viewModel.HasData;
-                }
-            }
-        }
-        
-        private async Task LoadDataAsync()
+    private async Task LoadDataAsync()
+    {
+        try
         {
             if (DataTypePicker.SelectedIndex < 0 || StartDatePicker.Date > EndDatePicker.Date)
                 return;
@@ -89,7 +91,33 @@ namespace SET09102.EnvironmentalScientist.Pages
                 SetupMetricPicker(dataType);
             }
         }
-
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to load data: {ex.Message}", "OK");
+        } }
+        private async void OnDataTypeChanged(object sender, EventArgs e)
+        {
+            await LoadDataAsync();
+        }
+        
+        private async void OnDateRangeChanged(object sender, DateChangedEventArgs e)
+        {
+            await LoadDataAsync();
+        }
+        
+        private async void OnMetricChanged(object sender, EventArgs e)
+        {
+            if (MetricPicker.SelectedIndex >= 0)
+            {
+                string? metric = MetricPicker.SelectedItem?.ToString();
+                if (metric != null)
+                {
+                    await _viewModel.UpdateSelectedMetricAsync(metric);
+                    StatsPanel.IsVisible = _viewModel.HasData;
+                }
+            }
+        }
+        
         private void SetupMetricPicker(string dataType)
         {
             MetricPicker.Items.Clear();
