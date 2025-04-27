@@ -1,22 +1,51 @@
 ﻿using Microsoft.Maui.Controls;
+using SET09102.Services;
+using SET09102.Administrator.Pages;
 
 namespace SET09102
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        private readonly IAuthService _authService;
+
+        public AppShell(IAuthService authService)
         {
             InitializeComponent();
+            _authService = authService;
 
             // Register routes for role-specific pages
             Routing.RegisterRoute("//MainPage", typeof(MainPage));
-            Routing.RegisterRoute("//Administrator/MainPage", typeof(Administrator.Pages.MainPage));
+            Routing.RegisterRoute("//Administrator/Login", typeof(LoginPage));
+            Routing.RegisterRoute("//Administrator/Dashboard", typeof(Administrator.Pages.MainPage));
             Routing.RegisterRoute("//Administrator/DataStoragePage", typeof(Administrator.Pages.DataStoragePage));
             Routing.RegisterRoute("//Administrator/SettingsPage", typeof(Administrator.Pages.SettingsPage));
             Routing.RegisterRoute("//OperationsManager/MainPage", typeof(OperationsManager.Pages.MainPage));
             Routing.RegisterRoute("//OperationsManager/DataVerificationPage", typeof(OperationsManager.Pages.DataVerificationPage));
             Routing.RegisterRoute("//EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));
             Routing.RegisterRoute("//EnvironmentalScientist/MapPage", typeof(EnvironmentalScientist.Pages.MapPage));
+
+            // Subscribe to navigating event to check authentication
+            Navigating += OnNavigating;
+        }
+
+        private async void OnNavigating(object sender, ShellNavigatingEventArgs e)
+        {
+            if (e.Target.Location.ToString().StartsWith("//Administrator/"))
+            {
+                // Allow navigation to login page
+                if (e.Target.Location.ToString() == "//Administrator/Login")
+                    return;
+
+                // Check if user is authenticated
+                bool isAuthenticated = await _authService.IsAuthenticatedAsync();
+                if (!isAuthenticated)
+                {
+                    // Cancel the current navigation
+                    e.Cancel();
+                    // Redirect to login page
+                    await Shell.Current.GoToAsync("//Administrator/Login");
+                }
+            }
         }
     }
 }
