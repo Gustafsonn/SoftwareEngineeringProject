@@ -16,7 +16,7 @@ namespace SET09102.Administrator.Pages
 
         private async void OnHomeClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//Administrator/MainPage");
+            await Shell.Current.GoToAsync("//Administrator/Dashboard");
         }
 
         private async void OnDataClicked(object sender, EventArgs e)
@@ -28,5 +28,10 @@ namespace SET09102.Administrator.Pages
         {
             await Shell.Current.GoToAsync("//Administrator/SettingsPage");
         }
+        
+        private async void OnUserManagementClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//Administrator/UserManagementPage");
+        }
     }
-} 
+}

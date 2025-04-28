@@ -142,6 +142,18 @@ namespace SET09102.Services
                         data_type TEXT NOT NULL,
                         value REAL NOT NULL,
                         timestamp TEXT NOT NULL
+                    );
+                    
+                    CREATE TABLE IF NOT EXISTS users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        username TEXT NOT NULL UNIQUE,
+                        password_hash TEXT NOT NULL,
+                        role TEXT NOT NULL,
+                        full_name TEXT NOT NULL,
+                        email TEXT,
+                        is_active INTEGER NOT NULL DEFAULT 1,
+                        created_at TEXT NOT NULL,
+                        last_login TEXT
                     );";
 
                 using (var command = new SqliteCommand(createTablesSql, _connection))
@@ -152,6 +164,10 @@ namespace SET09102.Services
                 // Initialize sensors
                 var sensorService = new SensorService(_dbPath);
                 await sensorService.InitializeSensorsAsync();
+                
+                // Initialize users
+                var userService = new UserService(this);
+                await userService.InitializeUsersTableAsync();
             }
             catch (Exception ex)
             {
@@ -168,7 +184,17 @@ namespace SET09102.Services
                     await connection.OpenAsync();
 
                     // Check if all required tables exist
-                    var tables = new[] { "air_quality", "water_quality", "weather_conditions", "sensors", "sensor_alerts", "sensor_maintenance_logs", "environmental_data" };
+                    var tables = new[] { 
+                        "air_quality", 
+                        "water_quality", 
+                        "weather_conditions", 
+                        "sensors", 
+                        "sensor_alerts", 
+                        "sensor_maintenance_logs", 
+                        "environmental_data",
+                        "users"
+                    };
+                    
                     foreach (var table in tables)
                     {
                         using (var command = new SqliteCommand($"SELECT name FROM sqlite_master WHERE type='table' AND name='{table}'", connection))
@@ -246,18 +272,5 @@ namespace SET09102.Services
             
             await command.ExecuteNonQueryAsync();
         }
-    }
-}
-
-// EnvironmentalDataEntity.cs
-namespace SET09102.Models
-{
-    // Rename this class to avoid confusion with the ViewModel
-    public class EnvironmentalDataEntity
-    {
-        // Initialize properties with default values to avoid null reference issues
-        public string DataType { get; set; } = string.Empty;
-        public double Value { get; set; }
-        public string Timestamp { get; set; } = string.Empty;
     }
 }
