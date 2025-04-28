@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:env="clr-namespace:SET09102.EnvironmentalScientist.Pages"
+             x:Class="SET09102.EnvironmentalScientist.Pages.EnvTrendPage"
+             Title="Environmental Trends">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="15">
+            <!-- Date Range Selection -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Date Range" FontSize="16" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Start Date"/>
+                            <DatePicker x:Name="StartDatePicker" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="End Date"/>
+                            <DatePicker x:Name="EndDatePicker" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Parameter Selection -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Parameters" FontSize="16" FontAttributes="Bold"/>
+                    <Picker x:Name="ParameterPicker" Title="Select Parameter" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Location Selection -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Location" FontSize="16" FontAttributes="Bold"/>
+                    <Picker x:Name="LocationPicker" Title="Select Sensor" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Generate Report Button -->
+            <Button Text="Generate Trend Report" Clicked="OnGenerateReportClicked" BackgroundColor="#512BD4" TextColor="White" FontAttributes="Bold"/>
+
+            <!-- Report Header -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="5">
+                    <Label x:Name="ReportHeader" Text="Report will appear here after generation." FontSize="16" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Data Table -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Data Points" FontSize="16" FontAttributes="Bold" />
+                    <CollectionView x:Name="DataPointsView" HeightRequest="200">
+                        <CollectionView.Header>
+                            <Grid ColumnDefinitions="3*,2*,2*" Padding="0,0,0,5">
+                                <Label Text="Date" FontAttributes="Bold" Grid.Column="0"/>
+                                <Label Text="Value" FontAttributes="Bold" HorizontalTextAlignment="End" Grid.Column="1"/>
+                                <Label Text="Status" FontAttributes="Bold" HorizontalTextAlignment="End" Grid.Column="2"/>
+                            </Grid>
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="3*,2*,2*" Padding="0,2">
+                                    <Label Text="{Binding Date}" />
+                                    <Label Text="{Binding Value}" Grid.Column="1" HorizontalTextAlignment="End"/>
+                                    <Label Text="{Binding Status}" Grid.Column="2" HorizontalTextAlignment="End"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Statistics -->
+            <Frame BorderColor="Gray" Padding="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Statistics" FontSize="16" FontAttributes="Bold"/>
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
+                        <Label Text="Average:" Grid.Row="0" Grid.Column="0"/>
+                        <Label x:Name="AverageValue" Grid.Row="0" Grid.Column="1"/>
+                        <Label Text="Maximum:" Grid.Row="1" Grid.Column="0"/>
+                        <Label x:Name="MaxValue" Grid.Row="1" Grid.Column="1"/>
+                        <Label Text="Minimum:" Grid.Row="2" Grid.Column="0"/>
+                        <Label x:Name="MinValue" Grid.Row="2" Grid.Column="1"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            <env:EnvSciNavigationBar/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
