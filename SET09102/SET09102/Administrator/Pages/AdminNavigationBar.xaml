@@ -4,7 +4,7 @@
              x:Class="SET09102.Administrator.Pages.AdminNavigationBar">
 
     <!-- add another * here to add pages to the nav grid -->
-    <Grid ColumnDefinitions="*,*,*,*" 
+    <Grid ColumnDefinitions="*,*,*,*,*" 
           BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1E}"
           Padding="10">
             
@@ -13,20 +13,26 @@
                 Clicked="OnDashboardClicked"
                 BackgroundColor="Transparent"
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
-
+        
         <Button Grid.Column="1"
                 Text="Admin Home"
                 Clicked="OnHomeClicked"
                 BackgroundColor="Transparent"
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
-        
+
         <Button Grid.Column="2"
+                Text="Sensor Config"
+                Clicked="OnSensorConfigClicked"
+                BackgroundColor="Transparent"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+        
+        <Button Grid.Column="3"
                 Text="📊 Data Storage"
                 Clicked="OnDataClicked"
                 BackgroundColor="Transparent"
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
 
-        <Button Grid.Column="3"
+        <Button Grid.Column="4"
                 Text="⚙️ Settings"
                 Clicked="OnSettingsClicked"
                 BackgroundColor="Transparent"
