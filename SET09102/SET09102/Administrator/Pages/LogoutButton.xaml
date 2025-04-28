@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SET09102.Components.LogoutButton">
+    <Button Text="Logout"
+            Clicked="OnLogoutClicked"
+            BackgroundColor="Transparent"
+            TextColor="{AppThemeBinding Light=DarkRed, Dark=LightPink}"
+            HorizontalOptions="End"/>
+</ContentView>

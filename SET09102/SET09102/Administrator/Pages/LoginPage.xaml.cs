@@ -17,6 +17,9 @@ namespace SET09102.Administrator.Pages
 
         private async void OnLoginClicked(object sender, EventArgs e)
         {
+            // Clear any previous error message
+            ErrorLabel.IsVisible = false;
+            
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
                 ErrorLabel.Text = "Please enter both username and password";
@@ -24,17 +27,48 @@ namespace SET09102.Administrator.Pages
                 return;
             }
 
-            bool isAuthenticated = await _authService.LoginAsync(Username, Password);
-            if (isAuthenticated)
+            LoginButton.IsEnabled = false;
+            
+            try
             {
-                // Navigate to the admin dashboard
-                await Shell.Current.GoToAsync("//Administrator/Dashboard");
+                bool isAuthenticated = await _authService.LoginAsync(Username, Password);
+                if (isAuthenticated)
+                {
+                    // Get the user's role to navigate to the appropriate dashboard
+                    string userRole = await _authService.GetCurrentUserRoleAsync();
+                    
+                    switch (userRole)
+                    {
+                        case "Administrator":
+                            await Shell.Current.GoToAsync("//Administrator/Dashboard");
+                            break;
+                        case "Operations Manager":
+                            await Shell.Current.GoToAsync("//OperationsManager/MainPage");
+                            break;
+                        case "Environmental Scientist":
+                            await Shell.Current.GoToAsync("//EnvironmentalScientist/MainPage");
+                            break;
+                        default:
+                            // If role is unknown, go to the main page
+                            await Shell.Current.GoToAsync("//MainPage");
+                            break;
+                    }
+                }
+                else
+                {
+                    ErrorLabel.Text = "Invalid username or password";
+                    ErrorLabel.IsVisible = true;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ErrorLabel.Text = "Invalid username or password";
+                ErrorLabel.Text = $"Login error: {ex.Message}";
                 ErrorLabel.IsVisible = true;
+            }
+            finally
+            {
+                LoginButton.IsEnabled = true;
             }
         }
     }
-} 
+}

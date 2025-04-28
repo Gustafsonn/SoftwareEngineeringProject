@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:admin="clr-namespace:SET09102.Administrator.Pages"
+             x:Class="SET09102.Administrator.Pages.UserManagementPage"
+             Title="User Management">
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <Label Text="User Management" 
+               FontSize="24" 
+               HorizontalOptions="Center" 
+               Margin="0,20,0,20"/>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="20" Padding="20">
+                
+                <!-- User List Section -->
+                <Frame BorderColor="LightGray" Padding="15" CornerRadius="5">
+                    <VerticalStackLayout>
+                        <Label Text="User List" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               Margin="0,0,0,10"/>
+                               
+                        <!-- Role Filter -->
+                        <Grid ColumnDefinitions="Auto,*" Margin="0,0,0,10">
+                            <Label Text="Filter by Role:" 
+                                   VerticalOptions="Center"/>
+                            <Picker x:Name="RoleFilterPicker" 
+                                    Grid.Column="1" 
+                                    SelectedIndexChanged="OnRoleFilterChanged">
+                                <Picker.Items>
+                                    <x:String>All Roles</x:String>
+                                    <x:String>Administrator</x:String>
+                                    <x:String>Operations Manager</x:String>
+                                    <x:String>Environmental Scientist</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Grid>
+                               
+                        <!-- User List -->
+                        <CollectionView x:Name="UserListView" 
+                                        SelectionMode="Single" 
+                                        SelectionChanged="OnUserSelected"
+                                        HeightRequest="300">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="*,*,Auto" Padding="10">
+                                        <Grid.Resources>
+                                            <Style TargetType="Label">
+                                                <Setter Property="VerticalOptions" Value="Center" />
+                                            </Style>
+                                        </Grid.Resources>
+                                        
+                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                            <Label Text="{Binding Username}" FontAttributes="Bold" />
+                                            <Label Text="{Binding FullName}" FontSize="12" />
+                                        </VerticalStackLayout>
+                                        
+                                        <Label Grid.Column="1" 
+                                               Text="{Binding Role}" 
+                                               HorizontalOptions="Start" />
+                                        
+                                        <Label Grid.Column="2" 
+                                               Text="{Binding IsActive, StringFormat='Active: {0}'}" 
+                                               HorizontalOptions="End">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsActive}" Value="False">
+                                                    <Setter Property="TextColor" Value="Red" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsActive}" Value="True">
+                                                    <Setter Property="TextColor" Value="Green" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        
+                        <!-- Buttons for Users -->
+                        <Grid ColumnDefinitions="*,*,*" Margin="0,10,0,0">
+                            <Button Text="Add User" 
+                                    Grid.Column="0"
+                                    Clicked="OnAddUserClicked"
+                                    Margin="0,0,5,0" />
+                            <Button Text="Edit" 
+                                    Grid.Column="1"
+                                    Clicked="OnEditUserClicked"
+                                    Margin="5,0,5,0"
+                                    IsEnabled="{Binding HasSelectedUser}" />
+                            <Button Text="Delete" 
+                                    Grid.Column="2"
+                                    Clicked="OnDeleteUserClicked"
+                                    Margin="5,0,0,0"
+                                    IsEnabled="{Binding HasSelectedUser}" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- User Details Section -->
+                <Frame BorderColor="LightGray" Padding="15" CornerRadius="5" IsVisible="{Binding HasSelectedUser}">
+                    <VerticalStackLayout>
+                        <Label Text="User Details" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               Margin="0,0,0,10"/>
+
+                        <Grid ColumnDefinitions="Auto,*" RowSpacing="10">
+                            <Label Text="Username:" Grid.Row="0" Grid.Column="0" />
+                            <Label Text="{Binding SelectedUser.Username}" Grid.Row="0" Grid.Column="1" />
+                            
+                            <Label Text="Full Name:" Grid.Row="1" Grid.Column="0" />
+                            <Label Text="{Binding SelectedUser.FullName}" Grid.Row="1" Grid.Column="1" />
+                            
+                            <Label Text="Email:" Grid.Row="2" Grid.Column="0" />
+                            <Label Text="{Binding SelectedUser.Email}" Grid.Row="2" Grid.Column="1" />
+                            
+                            <Label Text="Role:" Grid.Row="3" Grid.Column="0" />
+                            <Label Text="{Binding SelectedUser.Role}" Grid.Row="3" Grid.Column="1" />
+                            
+                            <Label Text="Created:" Grid.Row="4" Grid.Column="0" />
+                            <Label Text="{Binding SelectedUser.CreatedAt, StringFormat='{0:yyyy-MM-dd HH:mm}'}" Grid.Row="4" Grid.Column="1" />
+                            
+                            <Label Text="Last Login:" Grid.Row="5" Grid.Column="0" />
+                            <Label Text="{Binding SelectedUser.LastLogin, StringFormat='{0:yyyy-MM-dd HH:mm}'}" Grid.Row="5" Grid.Column="1" />
+                            
+                            <Label Text="Status:" Grid.Row="6" Grid.Column="0" />
+                            <Label Text="{Binding SelectedUser.IsActive, StringFormat='{0}'}" Grid.Row="6" Grid.Column="1">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding SelectedUser.IsActive}" Value="False">
+                                        <Setter Property="Text" Value="Inactive" />
+                                        <Setter Property="TextColor" Value="Red" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Label" Binding="{Binding SelectedUser.IsActive}" Value="True">
+                                        <Setter Property="Text" Value="Active" />
+                                        <Setter Property="TextColor" Value="Green" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Grid>
+                        
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="End" Margin="0,15,0,0">
+                            <Button Text="Reset Password" 
+                                    Clicked="OnResetPasswordClicked"
+                                    Margin="0,0,10,0" />
+                            <Button Text="Toggle Active Status" 
+                                    Clicked="OnToggleActiveStatusClicked" />
+                        </StackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Navigation Bar -->
+        <admin:AdminNavigationBar Grid.Row="2" />
+    </Grid>
+</ContentPage>

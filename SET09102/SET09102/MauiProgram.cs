@@ -23,9 +23,12 @@ namespace SET09102
             builder.Services.AddSingleton<SensorService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<IPreferences>(Preferences.Default);
+            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<SensorSettingsService>();
 
             // Register pages
             builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<UserManagementPage>();
             builder.Services.AddSingleton<AppShell>();
 
             return builder.Build();
