@@ -23,10 +23,15 @@ namespace SET09102.Administrator.Pages
         {
             await Shell.Current.GoToAsync("//Administrator/DataStoragePage");
         }
+        
+        private async void OnSensorMonitorClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//Administrator/SensorMonitoringPage");
+        }
 
         private async void OnSettingsClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//Administrator/SettingsPage");
         }
     }
-} 
+}

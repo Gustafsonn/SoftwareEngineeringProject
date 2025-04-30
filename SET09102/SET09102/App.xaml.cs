@@ -1,29 +1,49 @@
-﻿using SET09102.Services;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Maui.Controls;
+using SET09102.Services;
+using SET09102.Administrator.Pages;
 
-namespace SET09102;
-
-public partial class App : Application
+namespace SET09102
 {
-    private readonly DatabaseService _databaseService;
-    private readonly DataImportService _dataImportService;
-    private readonly AppShell _shell;
-
-    public App(DatabaseService databaseService, DataImportService dataImportService, AppShell shell)
+    public partial class AppShell : Shell
     {
-        InitializeComponent();
-        _databaseService = databaseService;
-        _dataImportService = dataImportService;
-        _shell = shell;
+        private readonly IAuthService _authService;
 
-        // Initialize SQLite
-        SQLitePCL.Batteries_V2.Init();
+        public AppShell(IAuthService authService)
+        {
+            InitializeComponent();
+            _authService = authService;
 
-        MainPage = _shell;
-    }
+            // Register routes for role-specific pages
+            Routing.RegisterRoute("//MainPage", typeof(MainPage));
+            Routing.RegisterRoute("//Administrator/Login", typeof(LoginPage));
+            Routing.RegisterRoute("//Administrator/Dashboard", typeof(Administrator.Pages.MainPage));
+            Routing.RegisterRoute("//Administrator/DataStoragePage", typeof(Administrator.Pages.DataStoragePage));
+            Routing.RegisterRoute("//Administrator/SensorMonitoringPage", typeof(Administrator.Pages.SensorMonitoringPage));
+            Routing.RegisterRoute("//Administrator/SettingsPage", typeof(Administrator.Pages.SettingsPage));
+            Routing.RegisterRoute("//OperationsManager/MainPage", typeof(OperationsManager.Pages.MainPage));
+            Routing.RegisterRoute("//OperationsManager/DataVerificationPage", typeof(OperationsManager.Pages.DataVerificationPage));
+            Routing.RegisterRoute("//EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));
+            Routing.RegisterRoute("//EnvironmentalScientist/MapPage", typeof(EnvironmentalScientist.Pages.MapPage));
+            Routing.RegisterRoute("//EnvironmentalScientist/HistoricalData", typeof(EnvironmentalScientist.Pages.HistoricalDataPage));
+            Routing.RegisterRoute("//EnvironmentalScientist/EnvTrendPage", typeof(EnvironmentalScientist.Pages.EnvTrendPage));
 
-    protected override Window CreateWindow(IActivationState? activationState)
-    {
-        return new Window(_shell);
+            Navigating += OnNavigating;
+        }
+
+        private async void OnNavigating(object sender, ShellNavigatingEventArgs e)
+        {
+            if (e.Target.Location.ToString().StartsWith("//Administrator/"))
+            {
+                if (e.Target.Location.ToString() == "//Administrator/Login")
+                    return;
+
+                bool isAuthenticated = await _authService.IsAuthenticatedAsync();
+                if (!isAuthenticated)
+                {
+                    e.Cancel();
+                    await Shell.Current.GoToAsync("//Administrator/Login");
+                }
+            }
+        }
     }
 }

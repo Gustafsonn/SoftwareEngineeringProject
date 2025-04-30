@@ -13,14 +13,26 @@ namespace SET09102
             InitializeComponent();
             _authService = authService;
 
-            // Register routes for role-specific pages
+            RegisterRoutes();
+        }
+
+        private void RegisterRoutes()
+        {
+            // Main Route
             Routing.RegisterRoute("//MainPage", typeof(MainPage));
+
+            // Administrator Routes
             Routing.RegisterRoute("//Administrator/Login", typeof(LoginPage));
             Routing.RegisterRoute("//Administrator/Dashboard", typeof(Administrator.Pages.MainPage));
             Routing.RegisterRoute("//Administrator/DataStoragePage", typeof(Administrator.Pages.DataStoragePage));
+            Routing.RegisterRoute("//Administrator/SensorMonitoringPage", typeof(Administrator.Pages.SensorMonitoringPage));
             Routing.RegisterRoute("//Administrator/SettingsPage", typeof(Administrator.Pages.SettingsPage));
+
+            // Operations Manager Routes
             Routing.RegisterRoute("//OperationsManager/MainPage", typeof(OperationsManager.Pages.MainPage));
             Routing.RegisterRoute("//OperationsManager/DataVerificationPage", typeof(OperationsManager.Pages.DataVerificationPage));
+
+            // Environmental Scientist Routes
             Routing.RegisterRoute("//EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));
             Routing.RegisterRoute("//EnvironmentalScientist/MapPage", typeof(EnvironmentalScientist.Pages.MapPage));
             Routing.RegisterRoute("//EnvironmentalScientist/HistoricalData", typeof(EnvironmentalScientist.Pages.HistoricalDataPage));

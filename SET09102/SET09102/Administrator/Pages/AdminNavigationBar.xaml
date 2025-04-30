@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SET09102.Administrator.Pages.AdminNavigationBar">
 
-    <!-- add another * here to add pages to the nav grid -->
-    <Grid ColumnDefinitions="*,*,*,*" 
+    <!-- Updated to add another column for the Sensor Monitoring page -->
+    <Grid ColumnDefinitions="*,*,*,*,*" 
           BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1E}"
           Padding="10">
             
@@ -25,12 +25,18 @@
                 Clicked="OnDataClicked"
                 BackgroundColor="Transparent"
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
-
+                
         <Button Grid.Column="3"
+                Text="🔌 Sensor Monitor"
+                Clicked="OnSensorMonitorClicked"
+                BackgroundColor="Transparent"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+
+        <Button Grid.Column="4"
                 Text="⚙️ Settings"
                 Clicked="OnSettingsClicked"
                 BackgroundColor="Transparent"
                 TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
     </Grid>
 
-</ContentView> 
+</ContentView>
