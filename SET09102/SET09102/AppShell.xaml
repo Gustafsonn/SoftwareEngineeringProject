@@ -32,6 +32,11 @@
             Route="//Administrator/DataStoragePage" />
             
         <ShellContent
+            Title="Sensor Monitoring"
+            ContentTemplate="{DataTemplate admin:SensorMonitoringPage}"
+            Route="//Administrator/SensorMonitoringPage" />
+            
+        <ShellContent
             Title="Settings"
             ContentTemplate="{DataTemplate admin:SettingsPage}"
             Route="//Administrator/SettingsPage" />

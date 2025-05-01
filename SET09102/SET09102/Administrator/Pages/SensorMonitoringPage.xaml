@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:admin="clr-namespace:SET09102.Administrator.Pages"
+             x:Class="SET09102.Administrator.Pages.SensorMonitoringPage"
+             Title="Sensor Monitoring">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <Label Text="Sensor Operational Status Monitoring" 
+               FontSize="24" 
+               HorizontalOptions="Center" 
+               Margin="0,20,0,20"/>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="20" Padding="20">
+                
+                <!-- Filters -->
+                <Frame BorderColor="LightGray" Padding="15" CornerRadius="5">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Filters" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,10"/>
+                               
+                        <Grid ColumnDefinitions="Auto,*,Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                            <Label Text="Sensor Type:" VerticalOptions="Center" Grid.Column="0" Grid.Row="0" />
+                            <Picker x:Name="SensorTypePicker" 
+                                    Grid.Column="1" 
+                                    Grid.Row="0"
+                                    SelectedIndexChanged="OnSensorTypeChanged">
+                                <Picker.Items>
+                                    <x:String>All Types</x:String>
+                                    <x:String>Air Quality</x:String>
+                                    <x:String>Water Quality</x:String>
+                                    <x:String>Weather</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            
+                            <Label Text="Status:" VerticalOptions="Center" Grid.Column="2" Grid.Row="0" />
+                            <Picker x:Name="StatusPicker" 
+                                    Grid.Column="3" 
+                                    Grid.Row="0"
+                                    SelectedIndexChanged="OnStatusChanged">
+                                <Picker.Items>
+                                    <x:String>All Status</x:String>
+                                    <x:String>Operational</x:String>
+                                    <x:String>Maintenance</x:String>
+                                    <x:String>Offline</x:String>
+                                </Picker.Items>
+                            </Picker>
+                            
+                            <Label Text="Show only active:" VerticalOptions="Center" Grid.Column="0" Grid.Row="1" />
+                            <CheckBox x:Name="ActiveOnlyCheckbox" 
+                                      Grid.Column="1" 
+                                      Grid.Row="1" 
+                                      CheckedChanged="OnActiveOnlyChanged"
+                                      IsChecked="True"
+                                      VerticalOptions="Center"
+                                      HorizontalOptions="Start"/>
+                                      
+                            <Button Text="Refresh" 
+                                    Grid.Column="2" 
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="2"
+                                    Clicked="OnRefreshClicked"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Dashboard Summary Cards -->
+                <Frame BorderColor="LightGray" Padding="15" CornerRadius="5">
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                        <!-- Operational Sensors Card -->
+                        <Frame Grid.Column="0" BackgroundColor="#E8F5E9" BorderColor="#81C784" Padding="10">
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Label Text="Operational" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                <Label x:Name="OperationalCountLabel" Text="0" FontSize="36" HorizontalOptions="Center"/>
+                                <Label Text="sensors" FontSize="14" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                        
+                        <!-- Maintenance Sensors Card -->
+                        <Frame Grid.Column="1" BackgroundColor="#FFF8E1" BorderColor="#FFD54F" Padding="10">
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Label Text="Maintenance" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                <Label x:Name="MaintenanceCountLabel" Text="0" FontSize="36" HorizontalOptions="Center"/>
+                                <Label Text="sensors" FontSize="14" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                        
+                        <!-- Offline Sensors Card -->
+                        <Frame Grid.Column="2" BackgroundColor="#FFEBEE" BorderColor="#E57373" Padding="10">
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Label Text="Offline" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+                                <Label x:Name="OfflineCountLabel" Text="0" FontSize="36" HorizontalOptions="Center"/>
+                                <Label Text="sensors" FontSize="14" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+                </Frame>
+                
+                <!-- Sensor List -->
+                <Frame BorderColor="LightGray" Padding="15" CornerRadius="5">
+                    <VerticalStackLayout>
+                        <Label Text="Sensor Status List" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               Margin="0,0,0,10"/>
+                               
+                        <!-- Sensor List -->
+                        <CollectionView x:Name="SensorListView" 
+                                        SelectionMode="Single" 
+                                        SelectionChanged="OnSensorSelected"
+                                        HeightRequest="300">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="Auto,*,Auto" Padding="5" Margin="0,5">
+                                        <Grid.Resources>
+                                            <Style TargetType="Label">
+                                                <Setter Property="VerticalOptions" Value="Center" />
+                                            </Style>
+                                        </Grid.Resources>
+                                        
+                                        <Frame Grid.Column="0" 
+                                               WidthRequest="16" 
+                                               HeightRequest="16" 
+                                               CornerRadius="8" 
+                                               Padding="0" 
+                                               Margin="0,0,10,0"
+                                               BackgroundColor="{Binding StatusColor}">
+                                            <Frame.Triggers>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding Status}" Value="operational">
+                                                    <Setter Property="BackgroundColor" Value="Green" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding Status}" Value="maintenance">
+                                                    <Setter Property="BackgroundColor" Value="Orange" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding Status}" Value="offline">
+                                                    <Setter Property="BackgroundColor" Value="Red" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Frame" Binding="{Binding IsActive}" Value="False">
+                                                    <Setter Property="BackgroundColor" Value="Gray" />
+                                                </DataTrigger>
+                                            </Frame.Triggers>
+                                        </Frame>
+                                        
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                            <Label Text="{Binding Type}" FontSize="12" />
+                                            <Label Text="{Binding Location}" FontSize="12" TextColor="Gray" />
+                                        </VerticalStackLayout>
+                                        
+                                        <VerticalStackLayout Grid.Column="2" HorizontalOptions="End">
+                                            <Label Text="{Binding Status}" FontSize="12" HorizontalOptions="End">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="operational">
+                                                        <Setter Property="TextColor" Value="Green" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="maintenance">
+                                                        <Setter Property="TextColor" Value="Orange" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="offline">
+                                                        <Setter Property="TextColor" Value="Red" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                            <Label Text="{Binding LastCalibratedText}" FontSize="10" TextColor="Gray" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Sensor Detail Panel (visible when sensor is selected) -->
+                <Frame x:Name="SensorDetailPanel" BorderColor="LightGray" Padding="15" CornerRadius="5" IsVisible="false">
+                    <VerticalStackLayout>
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Label Text="Sensor Details" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   Grid.Column="0"/>
+                                   
+                            <Button Text="Close" 
+                                    Clicked="OnCloseSensorDetailClicked"
+                                    HorizontalOptions="End" 
+                                    Grid.Column="1" 
+                                    WidthRequest="80"
+                                    HeightRequest="30"/>
+                        </Grid>
+                        
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" Margin="0,10,0,0" RowSpacing="8">
+                            <Label Text="ID:" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" />
+                            <Label x:Name="DetailIdLabel" Grid.Row="0" Grid.Column="1" />
+                            
+                            <Label Text="Name:" Grid.Row="1" Grid.Column="0" FontAttributes="Bold" />
+                            <Label x:Name="DetailNameLabel" Grid.Row="1" Grid.Column="1" />
+                            
+                            <Label Text="Type:" Grid.Row="2" Grid.Column="0" FontAttributes="Bold" />
+                            <Label x:Name="DetailTypeLabel" Grid.Row="2" Grid.Column="1" />
+                            
+                            <Label Text="Location:" Grid.Row="3" Grid.Column="0" FontAttributes="Bold" />
+                            <Label x:Name="DetailLocationLabel" Grid.Row="3" Grid.Column="1" />
+                            
+                            <Label Text="Status:" Grid.Row="4" Grid.Column="0" FontAttributes="Bold" />
+                            <HorizontalStackLayout Grid.Row="4" Grid.Column="1" Spacing="10">
+                                <Label x:Name="DetailStatusLabel" VerticalOptions="Center" />
+                                <Button Text="Change Status" 
+                                        Clicked="OnChangeStatusClicked"
+                                        WidthRequest="120"
+                                        HeightRequest="30"
+                                        FontSize="12" />
+                            </HorizontalStackLayout>
+                            
+                            <Label Text="Last Calibration:" Grid.Row="5" Grid.Column="0" FontAttributes="Bold" />
+                            <Label x:Name="DetailLastCalibrationLabel" Grid.Row="5" Grid.Column="1" />
+                            
+                            <Label Text="Next Calibration:" Grid.Row="6" Grid.Column="0" FontAttributes="Bold" />
+                            <Label x:Name="DetailNextCalibrationLabel" Grid.Row="6" Grid.Column="1" />
+                            
+                            <Label Text="Firmware Version:" Grid.Row="7" Grid.Column="0" FontAttributes="Bold" />
+                            <HorizontalStackLayout Grid.Row="7" Grid.Column="1" Spacing="10">
+                                <Label x:Name="DetailFirmwareLabel" VerticalOptions="Center" />
+                                <Button Text="Update Firmware" 
+                                        Clicked="OnUpdateFirmwareClicked"
+                                        WidthRequest="120"
+                                        HeightRequest="30"
+                                        FontSize="12" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                        
+                        <Button Text="Configure Sensor" 
+                                Clicked="OnConfigureSensorClicked"
+                                HorizontalOptions="Center"
+                                Margin="0,20,0,0" />
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Navigation Bar -->
+        <admin:AdminNavigationBar Grid.Row="2" />
+    </Grid>
+</ContentPage>
