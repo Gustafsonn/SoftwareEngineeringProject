@@ -21,12 +21,14 @@ namespace SET09102
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<DataImportService>();
             builder.Services.AddSingleton<SensorService>();
+            builder.Services.AddSingleton<SensorSettingsService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<IPreferences>(Preferences.Default);
-
-            // Register pages
             builder.Services.AddTransient<MainPage>(); // Make sure MainPage is registered
             builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<SensorMonitoringPage>();
+            builder.Services.AddTransient<DataStoragePage>();
+            builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddSingleton<AppShell>();
 
             // Create a logger for debugging
