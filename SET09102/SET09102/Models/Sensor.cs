@@ -1,29 +1,13 @@
-using System.ComponentModel;
-
 namespace SET09102.Models;
 
-public class Sensor : INotifyPropertyChanged
+public class Sensor
 {
-    private string _location;
-    private string _firmwareVersion;
-
     public int Id { get; set; }
     public int SiteId { get; set; }
-    public string Name { get; set; }
-    public string Type { get; set; }
-    public string Unit { get; set; }
-    public string Location
-    {
-        get => _location;
-        set
-        {
-            if (_location != value)
-            {
-                _location = value;
-                OnPropertyChanged(nameof(Location));
-            }
-        }
-    }
+    public string Name { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
+    public string Unit { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public string SiteType { get; set; } = string.Empty;
@@ -35,25 +19,14 @@ public class Sensor : INotifyPropertyChanged
     public DateTime NextCalibration { get; set; }
     public double? MinThreshold { get; set; }
     public double? MaxThreshold { get; set; }
-    public string FirmwareVersion
-    {
-        get => _firmwareVersion;
-        set
-        {
-            if (_firmwareVersion != value)
-            {
-                _firmwareVersion = value;
-                OnPropertyChanged(nameof(FirmwareVersion));
-            }
-        }
-    }
+    public string FirmwareVersion { get; set; } = string.Empty;
     public DateTime? LastMaintenance { get; set; }
     public DateTime? NextMaintenance { get; set; }
     public string Status { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-
+    
     // Extension properties for UI display
     public string StatusColor => this.GetStatusColor();
     public string LastCalibratedText => this.GetLastCalibratedText();

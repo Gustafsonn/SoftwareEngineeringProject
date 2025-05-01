@@ -19,13 +19,7 @@
             Title="Dashboard"
             ContentTemplate="{DataTemplate admin:MainPage}"
             Route="//Administrator/Dashboard" />
-
-        <ShellContent
-            Title="Dashboard"
-            ContentTemplate="{DataTemplate admin:SensorConfigurationPage}"
-            Route="//Administrator/SensorConfigurationPage" />
-
-
+            
         <ShellContent
             Title="Data Storage"
             ContentTemplate="{DataTemplate admin:DataStoragePage}"

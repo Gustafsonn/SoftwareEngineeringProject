@@ -1,3 +1,4 @@
+using Microsoft.Maui.Controls;
 
 namespace SET09102.Administrator.Pages
 {
@@ -16,10 +17,6 @@ namespace SET09102.Administrator.Pages
         private async void OnHomeClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//Administrator/MainPage");
-        }
-        private async void OnSensorConfigClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("//Administrator/SensorConfigurationPage");
         }
 
         private async void OnDataClicked(object sender, EventArgs e)

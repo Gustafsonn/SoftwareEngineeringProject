@@ -20,10 +20,10 @@ namespace SET09102
             // Register services
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<DataImportService>();
+            builder.Services.AddSingleton<SensorService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<IPreferences>(Preferences.Default);
-            builder.Services.AddSingleton<ISensorService>(_ => new SensorService(new DatabaseService().GetDatabasePath()));
-                            
+
             // Register pages
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddSingleton<AppShell>();

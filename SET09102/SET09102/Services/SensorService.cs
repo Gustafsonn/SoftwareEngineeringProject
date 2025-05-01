@@ -4,18 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace SET09102.Services;
 
-public interface ISensorService
-{
-    Task<ObservableCollection<Sensor>> GetSensorsAsync();
-
-    Task UpdateFirmware(int sensorId, string version);
-
-    // Using 'Location' as an arbitrary field to demonstrate that the sensor's config can be changed.
-    // In a real-world scenario, this can be replaced with any other field that requires user modification.
-    Task UpdateLocation(int sensorId, string location);
-}
-
-public class SensorService : ISensorService
+public class SensorService
 {
     private readonly string _dbPath;
 
@@ -429,31 +418,5 @@ public class SensorService : ISensorService
         }
 
         return sensors;
-    }
-
-    public async Task UpdateFirmware(int sensorId, string version)
-    {
-        using var connection = new SqliteConnection($"Data Source={_dbPath}");
-        await connection.OpenAsync();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "UPDATE sensors SET firmware_version=@FirmwareVersion WHERE id=@Id";
-        command.Parameters.AddWithValue("@Id", sensorId);
-        command.Parameters.AddWithValue("@FirmwareVersion", version);
-
-        await command.ExecuteNonQueryAsync();
-    }
-
-    public async Task UpdateLocation(int sensorId, string location)
-    {
-        using var connection = new SqliteConnection($"Data Source={_dbPath}");
-        await connection.OpenAsync();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "UPDATE sensors SET location=@Location WHERE id=@Id";
-        command.Parameters.AddWithValue("@Id", sensorId);
-        command.Parameters.AddWithValue("@Location", location);
-
-        await command.ExecuteNonQueryAsync();
     }
 } 
