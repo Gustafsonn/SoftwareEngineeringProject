@@ -103,12 +103,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Administrator\Pages\SensorConfigurationPage.xaml.cs">
-	    <DependentUpon>SensorConfigurationPage.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiXaml Update="OperationsManager\Pages\DataVerificationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
