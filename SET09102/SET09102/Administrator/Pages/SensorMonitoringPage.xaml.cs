@@ -3,6 +3,7 @@ using SET09102.Models;
 using SET09102.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SET09102.Administrator.Pages
@@ -28,7 +29,9 @@ namespace SET09102.Administrator.Pages
         {
             try
             {
-                InitializeComponent();
+                Debug.WriteLine("SensorMonitoringPage constructor started");
+                
+                // Skip InitializeComponent() - build UI programmatically instead
                 
                 string dbPath = new DatabaseService().GetDatabasePath();
                 _sensorService = new SensorService(dbPath);
@@ -36,25 +39,87 @@ namespace SET09102.Administrator.Pages
                 
                 BindingContext = this;
                 
-                // Set initial picker values
-                SensorTypePicker.SelectedIndex = 0;
-                StatusPicker.SelectedIndex = 0;
-                ActiveOnlyCheckbox.IsChecked = true;
+                // Build a simplified UI to avoid XAML issues
+                BuildSimplifiedUI();
                 
                 // Load sensors
-                LoadSensorsAsync();
+                Task.Run(async () => await LoadSensorsAsync());
+                
+                Debug.WriteLine("SensorMonitoringPage constructor completed");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error initializing SensorMonitoringPage: {ex.Message}");
+                Debug.WriteLine($"Error initializing SensorMonitoringPage: {ex.Message}");
                 if (ex.InnerException != null)
                 {
-                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
-                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                    Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    Debug.WriteLine($"Stack trace: {ex.StackTrace}");
                 }
                 
-                DisplayAlert("Error", "There was a problem loading the sensor monitoring page. Please try again later.", "OK");
+                // Create a simple error UI
+                Content = new VerticalStackLayout
+                {
+                    Padding = new Thickness(20),
+                    VerticalOptions = LayoutOptions.Center,
+                    Children =
+                    {
+                        new Label
+                        {
+                            Text = "Error Loading Sensor Monitoring",
+                            FontSize = 24,
+                            TextColor = Colors.Red,
+                            HorizontalOptions = LayoutOptions.Center
+                        },
+                        new Label
+                        {
+                            Text = ex.Message,
+                            FontSize = 16,
+                            TextColor = Colors.Gray,
+                            HorizontalOptions = LayoutOptions.Center,
+                            Margin = new Thickness(0, 20, 0, 0)
+                        },
+                        new Button
+                        {
+                            Text = "Go Back",
+                            HorizontalOptions = LayoutOptions.Center,
+                            Margin = new Thickness(0, 20, 0, 0)
+                        }
+                    }
+                };
             }
+        }
+
+        private void BuildSimplifiedUI()
+        {
+            // Create a simple loading UI to start with
+            Content = new VerticalStackLayout
+            {
+                Padding = new Thickness(20),
+                VerticalOptions = LayoutOptions.Center,
+                Children =
+                {
+                    new Label
+                    {
+                        Text = "Sensor Operational Status Monitoring",
+                        FontSize = 24,
+                        FontAttributes = FontAttributes.Bold,
+                        HorizontalOptions = LayoutOptions.Center
+                    },
+                    new Label
+                    {
+                        Text = "Loading sensor data...",
+                        FontSize = 16,
+                        HorizontalOptions = LayoutOptions.Center,
+                        Margin = new Thickness(0, 20, 0, 0)
+                    },
+                    new ActivityIndicator
+                    {
+                        IsRunning = true,
+                        HorizontalOptions = LayoutOptions.Center,
+                        Margin = new Thickness(0, 10, 0, 0)
+                    }
+                }
+            };
         }
 
         public ObservableCollection<Sensor> Sensors
@@ -74,7 +139,6 @@ namespace SET09102.Administrator.Pages
             {
                 _selectedSensor = value;
                 HasSelectedSensor = (_selectedSensor != null);
-                UpdateSensorDetailPanel();
                 OnPropertyChanged();
             }
         }
@@ -89,10 +153,11 @@ namespace SET09102.Administrator.Pages
             }
         }
 
-        private async void LoadSensorsAsync()
+        private async Task LoadSensorsAsync()
         {
             try
             {
+                Debug.WriteLine("Loading sensors");
                 _allSensors = await _sensorService.GetSensorsAsync();
                 
                 // Make sure _allSensors is never null to avoid crashes
@@ -101,22 +166,196 @@ namespace SET09102.Administrator.Pages
                 
                 FilterSensors();
                 UpdateStatusCounts();
-                SensorListView.ItemsSource = Sensors;
+                
+                // Update UI on the main thread
+                await MainThread.InvokeOnMainThreadAsync(() => {
+                    BuildCompleteUI();
+                });
+                
+                Debug.WriteLine($"Loaded {_allSensors.Count} sensors");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in LoadSensorsAsync: {ex.Message}");
+                Debug.WriteLine($"Error in LoadSensorsAsync: {ex.Message}");
                 if (ex.InnerException != null)
                 {
-                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    Debug.WriteLine($"Inner exception: {ex.InnerException.Message}");
                 }
                 
                 // Set empty collections to avoid null reference exceptions
                 _allSensors = new ObservableCollection<Sensor>();
                 Sensors = new ObservableCollection<Sensor>();
                 
-                await DisplayAlert("Error", $"Failed to load sensors: {ex.Message}", "OK");
+                await MainThread.InvokeOnMainThreadAsync(async () => {
+                    await DisplayAlert("Error", $"Failed to load sensors: {ex.Message}", "OK");
+                });
             }
+        }
+
+        private void BuildCompleteUI()
+        {
+            // Build a more complex UI once data is loaded
+            var grid = new Grid
+            {
+                RowDefinitions =
+                {
+                    new RowDefinition { Height = GridLength.Auto },
+                    new RowDefinition { Height = GridLength.Star },
+                    new RowDefinition { Height = GridLength.Auto }
+                },
+                Padding = new Thickness(20)
+            };
+
+            // Header
+            grid.Add(new Label
+            {
+                Text = "Sensor Operational Status Monitoring",
+                FontSize = 24,
+                FontAttributes = FontAttributes.Bold,
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(0, 20, 0, 20)
+            }, 0, 0);
+
+            // Main content - just a simple list for now
+            var sensorList = new ListView
+            {
+                ItemsSource = _filteredSensors,
+                HasUnevenRows = true,
+                SeparatorVisibility = SeparatorVisibility.Default,
+                SeparatorColor = Colors.LightGray,
+                Margin = new Thickness(0, 10)
+            };
+
+            sensorList.ItemTemplate = new DataTemplate(() =>
+            {
+                var grid = new Grid
+                {
+                    ColumnDefinitions =
+                    {
+                        new ColumnDefinition { Width = GridLength.Auto },
+                        new ColumnDefinition { Width = GridLength.Star },
+                        new ColumnDefinition { Width = GridLength.Auto }
+                    },
+                    Padding = new Thickness(10)
+                };
+
+                var statusIndicator = new Frame
+                {
+                    WidthRequest = 16,
+                    HeightRequest = 16,
+                    CornerRadius = 8,
+                    Padding = 0,
+                    Margin = new Thickness(0, 0, 10, 0)
+                };
+                statusIndicator.SetBinding(BackgroundColorProperty, new Binding("StatusColor", converter: new StatusColorConverter()));
+
+                var nameLabel = new Label { FontAttributes = FontAttributes.Bold };
+                nameLabel.SetBinding(Label.TextProperty, "Name");
+
+                var typeLabel = new Label { FontSize = 12 };
+                typeLabel.SetBinding(Label.TextProperty, "Type");
+
+                var locationLabel = new Label { FontSize = 12, TextColor = Colors.Gray };
+                locationLabel.SetBinding(Label.TextProperty, "Location");
+
+                var infoStack = new VerticalStackLayout
+                {
+                    Spacing = 2,
+                    Children = { nameLabel, typeLabel, locationLabel }
+                };
+
+                var statusLabel = new Label { FontSize = 12, HorizontalOptions = LayoutOptions.End };
+                statusLabel.SetBinding(Label.TextProperty, "Status");
+                statusLabel.SetBinding(Label.TextColorProperty, new Binding("Status", converter: new StatusTextColorConverter()));
+
+                var calibratedLabel = new Label { FontSize = 10, TextColor = Colors.Gray, HorizontalOptions = LayoutOptions.End };
+                calibratedLabel.SetBinding(Label.TextProperty, "LastCalibratedText");
+
+                var rightStack = new VerticalStackLayout
+                {
+                    HorizontalOptions = LayoutOptions.End,
+                    Children = { statusLabel, calibratedLabel }
+                };
+
+                grid.Add(statusIndicator, 0, 0);
+                grid.Add(infoStack, 1, 0);
+                grid.Add(rightStack, 2, 0);
+
+                return new ViewCell { View = grid };
+            });
+
+            // Add a ScrollView for the content 
+            var scrollView = new ScrollView
+            {
+                Content = sensorList
+            };
+            grid.Add(scrollView, 0, 1);
+
+            // Navigation bar (simplified)
+            var navBar = new Grid
+            {
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition { Width = GridLength.Star },
+                    new ColumnDefinition { Width = GridLength.Star },
+                    new ColumnDefinition { Width = GridLength.Star },
+                    new ColumnDefinition { Width = GridLength.Star },
+                    new ColumnDefinition { Width = GridLength.Star }
+                },
+                BackgroundColor = Colors.White,
+                Padding = new Thickness(10)
+            };
+
+            var dashboardBtn = new Button
+            {
+                Text = "🏠 Dashboard",
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.Black
+            };
+            dashboardBtn.Clicked += async (s, e) => await Shell.Current.GoToAsync("//MainPage");
+
+            var adminHomeBtn = new Button
+            {
+                Text = "Admin Home",
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.Black
+            };
+            adminHomeBtn.Clicked += async (s, e) => await Shell.Current.GoToAsync("//Administrator/MainPage");
+
+            var dataStorageBtn = new Button
+            {
+                Text = "📊 Data Storage",
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.Black
+            };
+            dataStorageBtn.Clicked += async (s, e) => await Shell.Current.GoToAsync("//Administrator/DataStoragePage");
+
+            var sensorMonitorBtn = new Button
+            {
+                Text = "🔌 Sensor Monitor",
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.Black
+            };
+            sensorMonitorBtn.Clicked += async (s, e) => await Shell.Current.GoToAsync("//Administrator/SensorMonitoringPage");
+
+            var settingsBtn = new Button
+            {
+                Text = "⚙️ Settings",
+                BackgroundColor = Colors.Transparent,
+                TextColor = Colors.Black
+            };
+            settingsBtn.Clicked += async (s, e) => await Shell.Current.GoToAsync("//Administrator/SettingsPage");
+
+            navBar.Add(dashboardBtn, 0, 0);
+            navBar.Add(adminHomeBtn, 1, 0);
+            navBar.Add(dataStorageBtn, 2, 0);
+            navBar.Add(sensorMonitorBtn, 3, 0);
+            navBar.Add(settingsBtn, 4, 0);
+
+            grid.Add(navBar, 0, 2);
+
+            // Set the content
+            Content = grid;
         }
 
         private void FilterSensors()
@@ -145,9 +384,6 @@ namespace SET09102.Administrator.Pages
             }
             
             Sensors = new ObservableCollection<Sensor>(filtered);
-            
-            // Update the status counts after filtering
-            UpdateStatusCounts();
         }
         
         private void UpdateStatusCounts()
@@ -161,142 +397,7 @@ namespace SET09102.Administrator.Pages
             _maintenanceCount = sensorsToCount.Count(s => s.Status.ToLower() == "maintenance");
             _offlineCount = sensorsToCount.Count(s => s.Status.ToLower() == "offline");
             
-            // Update the UI labels
-            OperationalCountLabel.Text = _operationalCount.ToString();
-            MaintenanceCountLabel.Text = _maintenanceCount.ToString();
-            OfflineCountLabel.Text = _offlineCount.ToString();
-        }
-        
-        private void UpdateSensorDetailPanel()
-        {
-            if (SelectedSensor != null)
-            {
-                DetailIdLabel.Text = SelectedSensor.Id.ToString();
-                DetailNameLabel.Text = SelectedSensor.Name;
-                DetailTypeLabel.Text = SelectedSensor.Type;
-                DetailLocationLabel.Text = SelectedSensor.Location;
-                DetailStatusLabel.Text = SelectedSensor.Status;
-                DetailLastCalibrationLabel.Text = SelectedSensor.LastCalibration.ToString("yyyy-MM-dd");
-                DetailNextCalibrationLabel.Text = SelectedSensor.NextCalibration.ToString("yyyy-MM-dd");
-                DetailFirmwareLabel.Text = SelectedSensor.FirmwareVersion;
-                
-                // Show the detail panel
-                SensorDetailPanel.IsVisible = true;
-            }
-            else
-            {
-                SensorDetailPanel.IsVisible = false;
-            }
-        }
-
-        private void OnSensorTypeChanged(object sender, EventArgs e)
-        {
-            _selectedSensorType = SensorTypePicker.SelectedItem?.ToString() ?? "All Types";
-            FilterSensors();
-        }
-
-        private void OnStatusChanged(object sender, EventArgs e)
-        {
-            _selectedStatus = StatusPicker.SelectedItem?.ToString() ?? "All Status";
-            FilterSensors();
-        }
-
-        private void OnActiveOnlyChanged(object sender, CheckedChangedEventArgs e)
-        {
-            _showActiveOnly = e.Value;
-            FilterSensors();
-        }
-
-        private void OnRefreshClicked(object sender, EventArgs e)
-        {
-            LoadSensorsAsync();
-        }
-
-        private void OnSensorSelected(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.CurrentSelection.Count > 0)
-            {
-                SelectedSensor = e.CurrentSelection[0] as Sensor;
-            }
-            else
-            {
-                SelectedSensor = null;
-            }
-        }
-
-        private void OnCloseSensorDetailClicked(object sender, EventArgs e)
-        {
-            // Clear the selection in the CollectionView and hide the detail panel
-            SensorListView.SelectedItem = null;
-            SelectedSensor = null;
-            SensorDetailPanel.IsVisible = false;
-        }
-
-        private async void OnChangeStatusClicked(object sender, EventArgs e)
-        {
-            if (SelectedSensor == null)
-                return;
-                
-            string[] statuses = new[] { "operational", "maintenance", "offline" };
-            string newStatus = await DisplayActionSheet("Update status:", "Cancel", null, statuses);
-            
-            if (newStatus == "Cancel" || string.IsNullOrWhiteSpace(newStatus) || newStatus == SelectedSensor.Status)
-                return;
-                
-            // Update the sensor status
-            SelectedSensor.Status = newStatus;
-            
-            // In a real application, you would call a service to update the status in the database
-            // For now, we'll just update the UI
-            DetailStatusLabel.Text = newStatus;
-            
-            await DisplayAlert("Status Updated", $"Sensor status updated to '{newStatus}'.", "OK");
-            
-            // Refresh the list to show the updated status
-            FilterSensors();
-            UpdateStatusCounts();
-        }
-
-        private async void OnUpdateFirmwareClicked(object sender, EventArgs e)
-        {
-            if (SelectedSensor == null)
-                return;
-                
-            string currentVersion = SelectedSensor.FirmwareVersion;
-            double versionNum = double.Parse(currentVersion.Split('.')[2]) + 0.1;
-            string newVersion = $"{currentVersion.Split('.')[0]}.{currentVersion.Split('.')[1]}.{versionNum}";
-            
-            bool confirm = await DisplayAlert("Update Firmware", 
-                $"Are you sure you want to update firmware from {currentVersion} to {newVersion}?", 
-                "Yes", "No");
-                
-            if (!confirm)
-                return;
-                
-            await DisplayAlert("Firmware Update", "Firmware update process initiated. This would trigger an OTA update to the device in a real implementation.", "OK");
-            
-            // Update the firmware version
-            SelectedSensor.FirmwareVersion = newVersion;
-            DetailFirmwareLabel.Text = newVersion;
-        }
-
-        private async void OnConfigureSensorClicked(object sender, EventArgs e)
-        {
-            if (SelectedSensor == null)
-                return;
-                
-            try
-            {
-                // Create a new instance of the SensorSettingsDialog
-                var settingsDialog = new SensorSettingsDialog(new DatabaseService(), SelectedSensor);
-                
-                // Navigate to the settings dialog
-                await Navigation.PushModalAsync(settingsDialog);
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Failed to open sensor settings: {ex.Message}", "OK");
-            }
+            Debug.WriteLine($"Status counts: Operational: {_operationalCount}, Maintenance: {_maintenanceCount}, Offline: {_offlineCount}");
         }
 
         public new event PropertyChangedEventHandler PropertyChanged;
@@ -304,6 +405,54 @@ namespace SET09102.Administrator.Pages
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    // Simple converter for status colors
+    public class StatusColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is string status)
+            {
+                return status.ToLower() switch
+                {
+                    "operational" => Colors.Green,
+                    "maintenance" => Colors.Orange,
+                    "offline" => Colors.Red,
+                    _ => Colors.Gray
+                };
+            }
+            return Colors.Gray;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    // Simple converter for status text colors
+    public class StatusTextColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is string status)
+            {
+                return status.ToLower() switch
+                {
+                    "operational" => Colors.Green,
+                    "maintenance" => Colors.Orange,
+                    "offline" => Colors.Red,
+                    _ => Colors.Gray
+                };
+            }
+            return Colors.Gray;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
