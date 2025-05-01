@@ -24,14 +24,15 @@ namespace SET09102
             builder.Services.AddSingleton<SensorSettingsService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<IPreferences>(Preferences.Default);
-
-            // Register pages - MUST include SensorMonitoringPage
-            builder.Services.AddTransient<MainPage>();
+            builder.Services.AddTransient<MainPage>(); // Make sure MainPage is registered
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<SensorMonitoringPage>();
             builder.Services.AddTransient<DataStoragePage>();
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddSingleton<AppShell>();
+
+            // Create a logger for debugging
+            builder.Services.AddLogging();
 
             return builder.Build();
         }
