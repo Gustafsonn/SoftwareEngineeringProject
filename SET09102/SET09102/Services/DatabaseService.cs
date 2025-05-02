@@ -142,6 +142,15 @@ namespace SET09102.Services
                         data_type TEXT NOT NULL,
                         value REAL NOT NULL,
                         timestamp TEXT NOT NULL
+                    );
+
+
+                    CREATE TABLE IF NOT EXISTS malfunctions (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        sensor_id INTEGER NOT NULL,
+                        description TEXT NOT NULL,
+                        resolved BOOLEAN NOT NULL DEFAULT 0,
+                        FOREIGN KEY (sensor_id) REFERENCES sensors(id)
                     );";
 
                 using (var command = new SqliteCommand(createTablesSql, _connection))

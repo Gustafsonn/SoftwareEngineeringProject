@@ -5,7 +5,6 @@
              x:Class="SET09102.Administrator.Pages.SensorConfigurationPage"
              Title="Sensor Configuration">
 
-
     <Grid RowDefinitions="*,Auto">
         <ScrollView Grid.Row="0">
             <CollectionView ItemsSource="{Binding Sensors}">

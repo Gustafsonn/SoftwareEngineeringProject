@@ -2,6 +2,7 @@ using SET09102.Models;
 using SET09102.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace SET09102.Administrator.Pages;
 
@@ -9,16 +10,16 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
 {
     private readonly ISensorService _sensorService;
     private ObservableCollection<Sensor> _sensors = [];
-    public Command<int> UpdateFirmwareCommand { get; }
-    public Command<int> UpdateConfigurationCommand { get; }
+    public ICommand UpdateFirmwareCommand { get; }
+    public ICommand UpdateConfigurationCommand { get; }
 
     public SensorConfigurationPage(ISensorService sensorService)
     {
         _sensorService = sensorService;
-        InitializeComponent();
-        BindingContext = this;
         UpdateFirmwareCommand = new Command<int>(OnUpdateFirmware);
         UpdateConfigurationCommand = new Command<int>(OnUpdateConfiguration);
+        InitializeComponent();
+        BindingContext = this;
         _ = LoadSensorsAsync();
     }
 
@@ -49,7 +50,7 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
 
                 var updatedSensor = sensor.Clone();
                 updatedSensor.FirmwareVersion = newVersion;
-                await _sensorService.UpdateSensor(updatedSensor);
+                await _sensorService.UpdateSensorAsync(updatedSensor);
                 sensor.FirmwareVersion = newVersion;
                 await DisplayAlert("Simulating Firmware Update", $"Simulating a firmware update for sensor {sensor.Name} (ID: {sensor.Id}) to '{newVersion}'.", "OK");               
             }
@@ -87,7 +88,7 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
 
                 var updatedSensor = sensor.Clone();
                 updatedSensor.Location = newLocation;
-                await _sensorService.UpdateSensor(updatedSensor);
+                await _sensorService.UpdateSensorAsync(updatedSensor);
                 sensor.Location = newLocation;
                 await DisplayAlert("Updated Configuration", $"Updated location configuration for sensor {sensor.Name} (ID: {sensor.Id}) to '{newLocation}'.", "OK");
             }
