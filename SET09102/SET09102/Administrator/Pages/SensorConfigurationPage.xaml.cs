@@ -40,10 +40,18 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
         {
             try
             {
-                var newVersion = UpdateFirmwareVersion(sensor.FirmwareVersion);
-                await _sensorService.UpdateFirmware(sensor.Id, newVersion);
+                var newVersion = GetNextFirmwareVersion(sensor.FirmwareVersion);
+
+                var performUpdate = await DisplayAlert("Update Firmware",
+                    $"Are you sure you want to update firmware from '{sensor.FirmwareVersion}' to '{newVersion}' for sensor '{sensor.Name}'?", "Yes", "No");
+
+                if (!performUpdate) return;
+
+                var updatedSensor = sensor.Clone();
+                updatedSensor.FirmwareVersion = newVersion;
+                await _sensorService.UpdateSensor(updatedSensor);
                 sensor.FirmwareVersion = newVersion;
-                await DisplayAlert("Updated Firmware", $"Updated firmware for sensor {sensor.Name} (ID: {sensor.Id}) to '{newVersion}'.", "OK");               
+                await DisplayAlert("Simulating Firmware Update", $"Simulating a firmware update for sensor {sensor.Name} (ID: {sensor.Id}) to '{newVersion}'.", "OK");               
             }
             catch (Exception ex)
             {
@@ -77,7 +85,9 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
 
                 if (string.IsNullOrEmpty(newLocation)) return;
 
-                await _sensorService.UpdateLocation(sensor.Id, newLocation);
+                var updatedSensor = sensor.Clone();
+                updatedSensor.Location = newLocation;
+                await _sensorService.UpdateSensor(updatedSensor);
                 sensor.Location = newLocation;
                 await DisplayAlert("Updated Configuration", $"Updated location configuration for sensor {sensor.Name} (ID: {sensor.Id}) to '{newLocation}'.", "OK");
             }
@@ -101,7 +111,7 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
         Sensors = await _sensorService.GetSensorsAsync();
     }
 
-    private static string UpdateFirmwareVersion(string firmwareVersion)
+    private static string GetNextFirmwareVersion(string firmwareVersion)
     {
         var versionParts = firmwareVersion.Split('.');
 
