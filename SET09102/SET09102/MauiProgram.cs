@@ -19,8 +19,8 @@ namespace SET09102
 
             // Register services
             builder.Services.AddSingleton<DatabaseService>();
-            builder.Services.AddSingleton<DataImportService>();
-            builder.Services.AddSingleton<SensorService>();
+            builder.Services.AddSingleton<ISensorService>(_ => new SensorService(new DatabaseService().GetDatabasePath()));
+            builder.Services.AddSingleton<DataImportService>();            
             builder.Services.AddSingleton<SensorSettingsService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<IPreferences>(Preferences.Default);

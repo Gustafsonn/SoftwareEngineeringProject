@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using SET09102.Services;
+﻿using SET09102.Services;
 using SET09102.Administrator.Pages;
 using System.Diagnostics;
 
@@ -14,8 +13,8 @@ namespace SET09102
             try
             {
                 Debug.WriteLine("AppShell constructor started");
-                
-                // Do NOT call InitializeComponent
+
+                InitializeComponent();
                 _authService = authService;
 
                 RegisterRoutes();
@@ -41,8 +40,9 @@ namespace SET09102
 
                 // Administrator Routes
                 Routing.RegisterRoute("//Administrator/Login", typeof(LoginPage));
-                Routing.RegisterRoute("//Administrator/Dashboard", typeof(Administrator.Pages.MainPage));
+                Routing.RegisterRoute("//Administrator/MainPage", typeof(Administrator.Pages.MainPage));
                 Routing.RegisterRoute("//Administrator/DataStoragePage", typeof(Administrator.Pages.DataStoragePage));
+                Routing.RegisterRoute("//Administrator/SensorConfigurationPage", typeof(Administrator.Pages.SensorConfigurationPage));               
                 Routing.RegisterRoute("//Administrator/SensorMonitoringPage", typeof(Administrator.Pages.SensorMonitoringPage));
                 Routing.RegisterRoute("//Administrator/SettingsPage", typeof(Administrator.Pages.SettingsPage));
 
