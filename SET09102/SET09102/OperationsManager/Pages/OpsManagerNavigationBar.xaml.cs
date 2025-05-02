@@ -21,4 +21,9 @@ public partial class OpsManagerNavigationBar : ContentView
     {
         await Shell.Current.GoToAsync("//OperationsManager/DataVerificationPage");
     }
+
+    private async void OnMalfunctionsClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("//OperationsManager/MalfunctionsPage");
+    }
 }

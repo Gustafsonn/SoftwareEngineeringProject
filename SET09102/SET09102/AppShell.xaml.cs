@@ -49,6 +49,7 @@ namespace SET09102
                 // Operations Manager Routes
                 Routing.RegisterRoute("//OperationsManager/MainPage", typeof(OperationsManager.Pages.MainPage));
                 Routing.RegisterRoute("//OperationsManager/DataVerificationPage", typeof(OperationsManager.Pages.DataVerificationPage));
+                Routing.RegisterRoute("//OperationsManager/MalfunctionsPage", typeof(OperationsManager.Pages.MalfunctionsPage));
 
                 // Environmental Scientist Routes
                 Routing.RegisterRoute("//EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));

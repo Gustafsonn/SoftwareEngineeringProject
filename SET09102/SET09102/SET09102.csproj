@@ -112,6 +112,9 @@
 	  <MauiXaml Update="OperationsManager\Pages\DataVerificationPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="OperationsManager\Pages\MalfunctionsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>
