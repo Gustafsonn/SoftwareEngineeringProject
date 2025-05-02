@@ -364,4 +364,36 @@ public class Sensor : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public Sensor Clone()
+    {
+        return new()
+        {
+            Id = Id,
+            SiteId = SiteId,
+            Name = Name,
+            Type = Type,
+            Unit = Unit,
+            Location = Location,
+            Latitude = Latitude,
+            Longitude = Longitude,
+            SiteType = SiteType,
+            Zone = Zone,
+            Agglomeration = Agglomeration,
+            Authority = Authority,
+            IsActive = IsActive,
+            LastCalibration = LastCalibration,
+            NextCalibration = NextCalibration,
+            MinThreshold = MinThreshold,
+            MaxThreshold = MaxThreshold,
+            FirmwareVersion = FirmwareVersion,
+            LastMaintenance = LastMaintenance,
+            NextMaintenance = NextMaintenance,
+            Status = Status,
+            Description = Description,
+            CreatedAt = CreatedAt,
+            UpdatedAt = UpdatedAt
+        };
+    }
+
 }

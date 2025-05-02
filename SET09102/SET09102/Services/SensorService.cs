@@ -7,12 +7,8 @@ namespace SET09102.Services;
 public interface ISensorService
 {
     Task<ObservableCollection<Sensor>> GetSensorsAsync();
-
-    Task UpdateFirmware(int sensorId, string version);
-
-    // Using 'Location' as an arbitrary field to demonstrate that the sensor's config can be changed.
-    // In a real-world scenario, this can be replaced with any other field that requires user modification.
-    Task UpdateLocation(int sensorId, string location);
+    
+    Task UpdateSensor(Sensor sensor);
 }
 
 public class SensorService : ISensorService
@@ -453,6 +449,65 @@ public class SensorService : ISensorService
         command.CommandText = "UPDATE sensors SET location=@Location WHERE id=@Id";
         command.Parameters.AddWithValue("@Id", sensorId);
         command.Parameters.AddWithValue("@Location", location);
+
+        await command.ExecuteNonQueryAsync();
+    }
+
+    public async Task UpdateSensor(Sensor sensor)
+    {
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        await connection.OpenAsync();
+
+        var command = connection.CreateCommand();
+        command.CommandText = @"
+        UPDATE sensors SET
+            site_id = $siteId,
+            name = $name,
+            type = $type,
+            unit = $unit,
+            location = $location,
+            latitude = $latitude,
+            longitude = $longitude,
+            site_type = $siteType,
+            zone = $zone,
+            agglomeration = $agglomeration,
+            authority = $authority,
+            is_active = $isActive,
+            last_calibration = $lastCalibration,
+            next_calibration = $nextCalibration,
+            min_threshold = $minThreshold,
+            max_threshold = $maxThreshold,
+            firmware_version = $firmwareVersion,
+            last_maintenance = $lastMaintenance,
+            next_maintenance = $nextMaintenance,
+            status = $status,
+            description = $description,
+            updated_at = $updatedAt
+        WHERE id = $id;";
+
+        command.Parameters.AddWithValue("$id", sensor.Id);
+        command.Parameters.AddWithValue("$siteId", sensor.SiteId);
+        command.Parameters.AddWithValue("$name", sensor.Name);
+        command.Parameters.AddWithValue("$type", sensor.Type);
+        command.Parameters.AddWithValue("$unit", sensor.Unit);
+        command.Parameters.AddWithValue("$location", sensor.Location);
+        command.Parameters.AddWithValue("$latitude", sensor.Latitude);
+        command.Parameters.AddWithValue("$longitude", sensor.Longitude);
+        command.Parameters.AddWithValue("$siteType", sensor.SiteType);
+        command.Parameters.AddWithValue("$zone", sensor.Zone);
+        command.Parameters.AddWithValue("$agglomeration", sensor.Agglomeration);
+        command.Parameters.AddWithValue("$authority", sensor.Authority);
+        command.Parameters.AddWithValue("$isActive", sensor.IsActive);
+        command.Parameters.AddWithValue("$lastCalibration", sensor.LastCalibration);
+        command.Parameters.AddWithValue("$nextCalibration", sensor.NextCalibration);
+        command.Parameters.AddWithValue("$minThreshold", sensor.MinThreshold ?? (object)DBNull.Value);
+        command.Parameters.AddWithValue("$maxThreshold", sensor.MaxThreshold ?? (object)DBNull.Value);
+        command.Parameters.AddWithValue("$firmwareVersion", sensor.FirmwareVersion);
+        command.Parameters.AddWithValue("$lastMaintenance", sensor.LastMaintenance ?? (object)DBNull.Value);
+        command.Parameters.AddWithValue("$nextMaintenance", sensor.NextMaintenance ?? (object)DBNull.Value);
+        command.Parameters.AddWithValue("$status", sensor.Status);
+        command.Parameters.AddWithValue("$description", sensor.Description);
+        command.Parameters.AddWithValue("$updatedAt", sensor.UpdatedAt);
 
         await command.ExecuteNonQueryAsync();
     }
