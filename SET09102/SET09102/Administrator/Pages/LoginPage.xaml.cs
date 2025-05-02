@@ -27,8 +27,7 @@ namespace SET09102.Administrator.Pages
             bool isAuthenticated = await _authService.LoginAsync(Username, Password);
             if (isAuthenticated)
             {
-                // Navigate to the admin dashboard
-                await Shell.Current.GoToAsync("//Administrator/Dashboard");
+                await Shell.Current.GoToAsync("//Administrator/MainPage");
             }
             else
             {
