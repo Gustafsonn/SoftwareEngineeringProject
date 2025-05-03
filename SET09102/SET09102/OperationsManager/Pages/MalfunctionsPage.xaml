@@ -6,11 +6,76 @@
              Title="Sensor Malfunctions">
 
     <Grid RowDefinitions="*,Auto">
-        <Label Grid.Row="0"
-         Text="Welcome to the Sensor Malfunctions Page"
-         VerticalOptions="Center" 
-         HorizontalOptions="Center" />  
+        <Grid Grid.Row="0" ColumnDefinitions="1*,2*">
+            <Grid Grid.Column="0" RowDefinitions="Auto, *">
+                <Label Grid.Row="0" HorizontalOptions="Center" FontSize="20" Text="All Sensors" />
+                <ScrollView Grid.Row="1">
+                    <CollectionView ItemsSource="{Binding Sensors}"
+                                    SelectionMode="Single" 
+                                    SelectedItem="{Binding SelectedSensor, Mode=TwoWay}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Stroke="LightGray"
+                                    StrokeThickness="2"
+                                    BackgroundColor="White"
+                                    Padding="10"
+                                    Margin="5"
+                                    StrokeShape="RoundRectangle 8">
+                                    <VerticalStackLayout Spacing="3">
+                                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" TextColor="Black" />
+                                        <Label Text="{Binding Location, StringFormat='Location: {0}'}" FontSize="14" TextColor="Gray" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+            </Grid>
+
+            <Label Grid.Column="1" IsVisible="{Binding NoSensorSelected}" 
+                   Text="Select a sensor to view, add, or resolve malfunctions." 
+                   VerticalOptions="Center"  
+                   HorizontalOptions="Center" 
+                   FontSize="20"/>
+
+
+            <Grid Grid.Column="1" IsVisible="{Binding IsSensorSelected}" RowDefinitions="Auto,*, Auto">
+                <Label Grid.Row="0" HorizontalOptions="Center" FontSize="20" Text="{Binding SensorMalfunctionSummary}" />
+                <ScrollView Grid.Row="1">
+                    <CollectionView ItemsSource="{Binding Malfunctions}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Stroke="LightGray"
+                                    StrokeThickness="2"
+                                    BackgroundColor="LightGray"
+                                    Padding="10"
+                                    Margin="5"
+                                    StrokeShape="RoundRectangle 8">
+                                    <VerticalStackLayout Spacing="3">
+                                        <Label Text="{Binding Description}" FontAttributes="Bold" FontSize="16" TextColor="Black" />
+                                        <Label Text="{Binding Resolved, StringFormat='Resolved: {0}'}" FontSize="14" TextColor="Black"/>
+                                        <Button Text="Resolve"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ResolveMalfunctionCommand}"
+                                                CommandParameter="{Binding Id}"
+                                                IsEnabled="{Binding Active}"
+                                                BackgroundColor="Blue"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+                <Button Grid.Row="2" Text="{Binding SelectedSensor.Name , StringFormat='Add {0} Malfunction'}" Padding="10" Margin="20"
+                        Command="{Binding AddNewMalfunctionCommand}"
+                        BackgroundColor="Blue" />
+            </Grid>
+        </Grid>
         <ops:OpsManagerNavigationBar Grid.Row="1" />
     </Grid>
-
 </ContentPage>
