@@ -151,6 +151,16 @@ namespace SET09102.Services
                         description TEXT NOT NULL,
                         resolved BOOLEAN NOT NULL DEFAULT 0,
                         FOREIGN KEY (sensor_id) REFERENCES sensors(id)
+                    );
+                    
+                    CREATE TABLE IF NOT EXISTS maintenance_logs (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        sensor_id INTEGER NOT NULL,
+                        maintenance_type TEXT NOT NULL,
+                        performed_by TEXT NOT NULL,
+                        notes TEXT,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (sensor_id) REFERENCES sensors(id)
                     );";
 
                 using (var command = new SqliteCommand(createTablesSql, _connection))
