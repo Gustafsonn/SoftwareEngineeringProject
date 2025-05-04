@@ -53,7 +53,8 @@ namespace SET09102
 
                 // Environmental Scientist Routes
                 Routing.RegisterRoute("//EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));
-                Routing.RegisterRoute("//EnvironmentalScientist/MapPage", typeof(EnvironmentalScientist.Pages.MapPage));
+                //Routing.RegisterRoute("//EnvironmentalScientist/MapPage", typeof(EnvironmentalScientist.Pages.MapPage));
+                Routing.RegisterRoute("//EnvironmentalScientist/DisplayThresholdAlerts", typeof(EnvironmentalScientist.Pages.DisplayThresholdAlerts));
                 Routing.RegisterRoute("//EnvironmentalScientist/HistoricalData", typeof(EnvironmentalScientist.Pages.HistoricalDataPage));
                 Routing.RegisterRoute("//EnvironmentalScientist/EnvTrendPage", typeof(EnvironmentalScientist.Pages.EnvTrendPage));
 

@@ -60,10 +60,15 @@
             ContentTemplate="{DataTemplate env:MainPage}" 
             Route="//EnvironmentalScientist/MainPage" />
             
-        <ShellContent 
+        <!--<ShellContent 
             Title="Map View"
             ContentTemplate="{DataTemplate env:MapPage}" 
-            Route="//EnvironmentalScientist/MapPage" />
+            Route="//EnvironmentalScientist/MapPage" />-->
+        
+        <ShellContent 
+            Title="Threshold Alerts"
+            ContentTemplate="{DataTemplate env:DisplayThresholdAlerts}" 
+            Route="//EnvironmentalScientist/DisplayThresholdAlerts" />
             
         <ShellContent 
             Title="Historical Data"
