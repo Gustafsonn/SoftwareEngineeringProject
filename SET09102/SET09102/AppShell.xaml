@@ -52,6 +52,11 @@
             Title="Data Verification"
             ContentTemplate="{DataTemplate ops:DataVerificationPage}" 
             Route="//OperationsManager/DataVerificationPage" />
+
+        <ShellContent 
+            Title="Maintenance Schedule"
+            ContentTemplate="{DataTemplate ops:MaintenanceSchedulePage}" 
+            Route="//OperationsManager/MaintenanceSchedulePage" />
     </FlyoutItem>
     
     <FlyoutItem Title="Environmental Scientist" Icon="👨‍🔬">

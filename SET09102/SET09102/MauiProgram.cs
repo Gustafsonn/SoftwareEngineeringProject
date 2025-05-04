@@ -1,5 +1,6 @@
 ﻿using SET09102.Services;
 using SET09102.Administrator.Pages;
+using SET09102.OperationsManager.Pages;
 
 namespace SET09102
 {
@@ -29,6 +30,8 @@ namespace SET09102
             builder.Services.AddTransient<DataStoragePage>();
             builder.Services.AddTransient<SettingsPage>();
             builder.Services.AddSingleton<AppShell>();
+            builder.Services.AddSingleton<MaintenanceLogService>();
+            builder.Services.AddTransient<MaintenanceSchedulePage>();
 
             // Create a logger for debugging
             builder.Services.AddLogging();

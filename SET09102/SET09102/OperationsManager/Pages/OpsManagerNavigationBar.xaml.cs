@@ -1,29 +1,35 @@
-namespace SET09102.OperationsManager.Pages;
-
-public partial class OpsManagerNavigationBar : ContentView
+namespace SET09102.OperationsManager.Pages
 {
-    public OpsManagerNavigationBar()
+    public partial class OpsManagerNavigationBar : ContentView
     {
-        InitializeComponent();
-    }
+        public OpsManagerNavigationBar()
+        {
+            InitializeComponent();
+        }
 
-    private async void OnDashboardClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//MainPage");
-    }
+        private async void OnDashboardClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//MainPage");
+        }
 
-    private async void OnHomeClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//OperationsManager/MainPage");
-    }
+        private async void OnHomeClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//OperationsManager/MainPage");
+        }
 
-    private async void OnDataVerificationClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//OperationsManager/DataVerificationPage");
-    }
+        private async void OnDataVerificationClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//OperationsManager/DataVerificationPage");
+        }
 
-    private async void OnMalfunctionsClicked(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("//OperationsManager/MalfunctionsPage");
+        private async void OnMalfunctionsClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//OperationsManager/MalfunctionsPage");
+        }
+        
+        private async void OnMaintenanceClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//OperationsManager/MaintenanceSchedulePage");
+        }
     }
 }
