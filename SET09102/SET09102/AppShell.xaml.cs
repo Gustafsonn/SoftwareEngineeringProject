@@ -1,5 +1,6 @@
 ﻿using SET09102.Services;
 using SET09102.Administrator.Pages;
+using SET09102.OperationsManager.Pages;
 using System.Diagnostics;
 
 namespace SET09102
@@ -41,15 +42,16 @@ namespace SET09102
                 // Administrator Routes
                 Routing.RegisterRoute("//Administrator/Login", typeof(LoginPage));
                 Routing.RegisterRoute("//Administrator/MainPage", typeof(Administrator.Pages.MainPage));
-                Routing.RegisterRoute("//Administrator/DataStoragePage", typeof(Administrator.Pages.DataStoragePage));
-                Routing.RegisterRoute("//Administrator/SensorConfigurationPage", typeof(Administrator.Pages.SensorConfigurationPage));               
-                Routing.RegisterRoute("//Administrator/SensorMonitoringPage", typeof(Administrator.Pages.SensorMonitoringPage));
-                Routing.RegisterRoute("//Administrator/SettingsPage", typeof(Administrator.Pages.SettingsPage));
+                Routing.RegisterRoute("//Administrator/DataStoragePage", typeof(DataStoragePage));
+                Routing.RegisterRoute("//Administrator/SensorConfigurationPage", typeof(SensorConfigurationPage));               
+                Routing.RegisterRoute("//Administrator/SensorMonitoringPage", typeof(SensorMonitoringPage));
+                Routing.RegisterRoute("//Administrator/SettingsPage", typeof(SettingsPage));
 
-                // Operations Manager Routes
+                // Operations Manager Routes  
                 Routing.RegisterRoute("//OperationsManager/MainPage", typeof(OperationsManager.Pages.MainPage));
-                Routing.RegisterRoute("//OperationsManager/DataVerificationPage", typeof(OperationsManager.Pages.DataVerificationPage));
-                Routing.RegisterRoute("//OperationsManager/MalfunctionsPage", typeof(OperationsManager.Pages.MalfunctionsPage));
+                Routing.RegisterRoute("//OperationsManager/DataVerificationPage", typeof(DataVerificationPage));
+                Routing.RegisterRoute("//OperationsManager/MalfunctionsPage", typeof(MalfunctionsPage));
+                Routing.RegisterRoute("//OperationsManager/MaintenanceSchedulePage", typeof(MaintenanceSchedulePage));
 
                 // Environmental Scientist Routes
                 Routing.RegisterRoute("//EnvironmentalScientist/MainPage", typeof(EnvironmentalScientist.Pages.MainPage));

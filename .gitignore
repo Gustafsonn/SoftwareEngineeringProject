@@ -3,6 +3,7 @@
 
 ### VisualStudioCode ###
 .vscode/*
+.vs/*
 SET09102/.vs/*
 SET09102/.vs
 !.vscode/settings.json

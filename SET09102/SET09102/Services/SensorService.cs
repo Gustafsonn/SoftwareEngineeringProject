@@ -6,9 +6,11 @@ namespace SET09102.Services;
 
 public interface ISensorService
 {
-    Task<ObservableCollection<Sensor>> GetSensorsAsync();
-    
-    Task UpdateSensor(Sensor sensor);
+    Task<ObservableCollection<Sensor>> GetSensorsAsync();  
+    Task UpdateSensorAsync(Sensor sensor);
+    Task<ObservableCollection<Malfunction>> GetMalfunctionsAsync(int sensorId);
+    Task CreateMalfunctionAsync(Malfunction malfunction);
+    Task UpdateMalfunctionAsync(Malfunction malfunction);
 }
 
 public class SensorService : ISensorService
@@ -371,6 +373,28 @@ public class SensorService : ISensorService
 
                 await command.ExecuteNonQueryAsync();
             }
+
+            // Create some example sensor malfunctions.
+            var malfuncions = new List<Malfunction> {
+                new ()
+                {
+                    SensorId = 1,
+                    Description = "This is an example of an active (unresolved) malfunction for a sensor",
+                    Resolved = false
+                },
+                new ()
+                {
+                    SensorId = 2,
+                    Description = "This is an example of an inactive (resolved) malfunction for a sensor",
+                    Resolved = true
+                }
+            };
+
+            // Insert all the example sensor malfunctions into database.
+            foreach (var malfunction in malfuncions)
+            {
+                await CreateMalfunctionAsync(malfunction);                
+            }
         }
         catch (Exception)
         {
@@ -426,34 +450,9 @@ public class SensorService : ISensorService
 
         return sensors;
     }
+ 
 
-    public async Task UpdateFirmware(int sensorId, string version)
-    {
-        using var connection = new SqliteConnection($"Data Source={_dbPath}");
-        await connection.OpenAsync();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "UPDATE sensors SET firmware_version=@FirmwareVersion WHERE id=@Id";
-        command.Parameters.AddWithValue("@Id", sensorId);
-        command.Parameters.AddWithValue("@FirmwareVersion", version);
-
-        await command.ExecuteNonQueryAsync();
-    }
-
-    public async Task UpdateLocation(int sensorId, string location)
-    {
-        using var connection = new SqliteConnection($"Data Source={_dbPath}");
-        await connection.OpenAsync();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "UPDATE sensors SET location=@Location WHERE id=@Id";
-        command.Parameters.AddWithValue("@Id", sensorId);
-        command.Parameters.AddWithValue("@Location", location);
-
-        await command.ExecuteNonQueryAsync();
-    }
-
-    public async Task UpdateSensor(Sensor sensor)
+    public async Task UpdateSensorAsync(Sensor sensor)
     {
         using var connection = new SqliteConnection($"Data Source={_dbPath}");
         await connection.OpenAsync();
@@ -509,6 +508,78 @@ public class SensorService : ISensorService
         command.Parameters.AddWithValue("$description", sensor.Description);
         command.Parameters.AddWithValue("$updatedAt", sensor.UpdatedAt);
 
+        await command.ExecuteNonQueryAsync();
+    }
+
+
+    public async Task<ObservableCollection<Malfunction>> GetMalfunctionsAsync(int sensorId)
+    {
+        var malfunctions = new ObservableCollection<Malfunction>();
+
+        try
+        {
+            using var connection = new SqliteConnection($"Data Source={_dbPath}");
+            await connection.OpenAsync();
+
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM malfunctions WHERE sensor_id=$sensor_id";
+            command.Parameters.AddWithValue("$sensor_id", sensorId);
+
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                malfunctions.Add(new Malfunction
+                {
+                    Id = reader.GetInt32(0),
+                    SensorId = reader.GetInt32(1),
+                    Description = reader.GetString(2),
+                    Resolved = reader.GetBoolean(3)
+                });
+            }
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+
+        return malfunctions;
+    }
+
+    public async Task CreateMalfunctionAsync(Malfunction malfunction)
+    {
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        await connection.OpenAsync();
+
+        var command = connection.CreateCommand();
+        command.CommandText = @"
+            INSERT INTO malfunctions (sensor_id, description, resolved)
+            VALUES ($sensor_id, $description, $resolved);";
+
+        command.Parameters.AddWithValue("$id", malfunction.Id);
+        command.Parameters.AddWithValue("$sensor_id", malfunction.SensorId);
+        command.Parameters.AddWithValue("$description", malfunction.Description);
+        command.Parameters.AddWithValue("$resolved", malfunction.Resolved);
+        await command.ExecuteNonQueryAsync();
+
+    }
+
+    public async Task UpdateMalfunctionAsync(Malfunction malfunction)
+    {
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        await connection.OpenAsync();
+
+        var command = connection.CreateCommand();
+        command.CommandText = @"
+            UPDATE malfunctions SET
+                sensor_id = $sensor_id,
+                description = $description,
+                resolved = $resolved
+            WHERE id = $id;";
+
+        command.Parameters.AddWithValue("$id", malfunction.Id);
+        command.Parameters.AddWithValue("$sensor_id", malfunction.SensorId);
+        command.Parameters.AddWithValue("$description", malfunction.Description);
+        command.Parameters.AddWithValue("$resolved", malfunction.Resolved);
         await command.ExecuteNonQueryAsync();
     }
 } 
