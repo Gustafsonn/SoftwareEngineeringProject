@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SET09102.EnvironmentalScientist.Pages.DisplayThresholdAlerts"
+             Title="DisplayThresholdAlerts">
+
+    <Grid RowDefinitions="*" ColumnDefinitions="2*, 3*" Padding="10">
+        <!-- Left: List of Breached Sensors -->
+        
+        <ScrollView Grid.Column="0">
+            <CollectionView  
+                ItemsSource="{Binding SensorAlerts}"
+                SelectionMode="Single" 
+                SelectedItem="{Binding SelectedSensorAlert, Mode=TwoWay}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="5" Padding="10">
+                            <StackLayout>
+                                <Label Text="{Binding Sensor.Name}" FontAttributes="Bold" FontSize="16"/>
+                                <Label Text="{Binding Message}" FontSize="14"/>
+                                <Label Text="{Binding AlertType}" FontSize="14"/>
+                                <Label Text="{Binding Severity}" FontSize="14"/>
+                                <Label Text="{Binding Sensor.Location}" FontSize="12"/>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+                       
+        <!-- Right: Map Display or Message -->
+        <Grid Grid.Column="1" RowDefinitions="Auto, *" IsVisible="{Binding SensorAlertSelected}">
+            <Label Grid.Row="0" Text="{Binding SelectedSensorHeading}" FontSize="15" Padding="5" />
+            <WebView Grid.Row="1" Source="{ Binding MapUrl}"/>
+        </Grid>
+               
+        <Label Grid.Column="1" IsVisible="{Binding NoSensorAlertSelected}" 
+            Text="Select a sensor alert to view it's location on map." 
+            VerticalOptions="Center"  
+            HorizontalOptions="Center" 
+            FontSize="20"/>
+
+
+    </Grid>
+</ContentPage>

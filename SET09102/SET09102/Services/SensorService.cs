@@ -11,6 +11,8 @@ public interface ISensorService
     Task<ObservableCollection<Malfunction>> GetMalfunctionsAsync(int sensorId);
     Task CreateMalfunctionAsync(Malfunction malfunction);
     Task UpdateMalfunctionAsync(Malfunction malfunction);
+    Task<ObservableCollection<SensorAlert>> GetSensorAlertsAsync();
+    Task CreateAlertAsync(SensorAlert alert);
 }
 
 public class SensorService : ISensorService
@@ -24,6 +26,18 @@ public class SensorService : ISensorService
 
     public async Task InitializeSensorsAsync()
     {
+        const string Site1Location = "Edinburgh Nicolson Street";
+        const double Site1Latitude = 55.94476;
+        const double Site1Longitude = -3.183991;
+        
+        const string Site2Location = "Edinburgh Water of Leith";
+        const double Site2Latitude = 55.906604;
+        const double Site2Longitude = -3.268995;
+
+        const string Site3Location = "Edinburgh Calton Hill";
+        const double Site3Latitude = 55.955761;
+        const double Site3Longitude = -3.182980;
+
         try
         {
             using var connection = new SqliteConnection($"Data Source={_dbPath}");
@@ -38,9 +52,9 @@ public class SensorService : ISensorService
                     Name = "Nitrogen Dioxide Sensor",
                     Type = "Air Quality",
                     Unit = "µg/m³",
-                    Location = "Edinburgh Nicolson Street",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site1Location,
+                    Latitude = Site1Latitude,
+                    Longitude = Site1Longitude,
                     SiteType = "Urban Traffic",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -62,9 +76,9 @@ public class SensorService : ISensorService
                     Name = "Sulphur Dioxide Sensor",
                     Type = "Air Quality",
                     Unit = "µg/m³",
-                    Location = "Edinburgh Nicolson Street",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site1Location,
+                    Latitude = Site1Latitude,
+                    Longitude = Site1Longitude,
                     SiteType = "Urban Traffic",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -86,9 +100,9 @@ public class SensorService : ISensorService
                     Name = "PM2.5 Sensor",
                     Type = "Air Quality",
                     Unit = "µg/m³",
-                    Location = "Edinburgh Nicolson Street",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site1Location,
+                    Latitude = Site1Latitude,
+                    Longitude = Site1Longitude,
                     SiteType = "Urban Traffic",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -110,9 +124,9 @@ public class SensorService : ISensorService
                     Name = "PM10 Sensor",
                     Type = "Air Quality",
                     Unit = "µg/m³",
-                    Location = "Edinburgh Nicolson Street",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site1Location,
+                    Latitude = Site1Latitude,
+                    Longitude = Site1Longitude,
                     SiteType = "Urban Traffic",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -139,9 +153,9 @@ public class SensorService : ISensorService
                     Name = "Nitrate Sensor",
                     Type = "Water Quality",
                     Unit = "mg/l",
-                    Location = "Water Quality Sensor 1",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site2Location,
+                    Latitude = Site2Latitude,
+                    Longitude = Site2Longitude,
                     SiteType = "Water Quality",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -163,9 +177,9 @@ public class SensorService : ISensorService
                     Name = "Nitrite Sensor",
                     Type = "Water Quality",
                     Unit = "mg/l",
-                    Location = "Water Quality Sensor 1",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site2Location,
+                    Latitude = Site2Latitude,
+                    Longitude = Site2Longitude,
                     SiteType = "Water Quality",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -187,9 +201,9 @@ public class SensorService : ISensorService
                     Name = "Phosphate Sensor",
                     Type = "Water Quality",
                     Unit = "mg/l",
-                    Location = "Water Quality Sensor 1",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site2Location,
+                    Latitude = Site2Latitude,
+                    Longitude = Site2Longitude,
                     SiteType = "Water Quality",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -211,9 +225,9 @@ public class SensorService : ISensorService
                     Name = "E. Coli Sensor",
                     Type = "Water Quality",
                     Unit = "cfu/100ml",
-                    Location = "Water Quality Sensor 1",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site2Location,
+                    Latitude = Site2Latitude,
+                    Longitude = Site2Longitude,
                     SiteType = "Water Quality",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -240,9 +254,9 @@ public class SensorService : ISensorService
                     Name = "Temperature Sensor",
                     Type = "Weather",
                     Unit = "°C",
-                    Location = "Weather Station 1",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site3Location,
+                    Latitude = Site3Latitude,
+                    Longitude = Site3Longitude,
                     SiteType = "Weather",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -264,9 +278,9 @@ public class SensorService : ISensorService
                     Name = "Humidity Sensor",
                     Type = "Weather",
                     Unit = "%",
-                    Location = "Weather Station 1",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site3Location,
+                    Latitude = Site3Latitude,
+                    Longitude = Site3Longitude,
                     SiteType = "Weather",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -288,9 +302,9 @@ public class SensorService : ISensorService
                     Name = "Wind Speed Sensor",
                     Type = "Weather",
                     Unit = "m/s",
-                    Location = "Weather Station 1",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site3Location,
+                    Latitude = Site3Latitude,
+                    Longitude = Site3Longitude,
                     SiteType = "Weather",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -312,9 +326,9 @@ public class SensorService : ISensorService
                     Name = "Wind Direction Sensor",
                     Type = "Weather",
                     Unit = "degrees",
-                    Location = "Weather Station 1",
-                    Latitude = 55.94476,
-                    Longitude = -3.183991,
+                    Location = Site3Location,
+                    Latitude = Site3Latitude,
+                    Longitude = Site3Longitude,
                     SiteType = "Weather",
                     Zone = "Central Scotland",
                     Agglomeration = "Edinburgh Urban Area",
@@ -393,10 +407,37 @@ public class SensorService : ISensorService
             // Insert all the example sensor malfunctions into database.
             foreach (var malfunction in malfuncions)
             {
-                await CreateMalfunctionAsync(malfunction);                
+                await CreateMalfunctionAsync(malfunction);
+            }
+
+            // Create some example sensor alerts.
+            var alerts = new List<SensorAlert> {
+                new ()
+                {
+                    SensorId = 1,
+                    AlertType = "Exceeds max threshold",
+                    Message = "NO2 levels too high a value for the sensor",
+                    Severity = "Medium",
+                    ThresholdValue = 200,
+                    MeasuredValue = 220                },
+                new ()
+                {
+                    SensorId = 5,
+                    AlertType = "Exceeds min threshold",
+                    Message = "Nitrate levels too low",
+                    Severity = "High",
+                    ThresholdValue = 0,
+                    MeasuredValue = -1
+                }
+            };
+
+            // Insert all the example sensor alerts into database.
+            foreach (var alert in alerts)
+            {
+                await CreateAlertAsync(alert);
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             throw;
         }
@@ -554,8 +595,7 @@ public class SensorService : ISensorService
         command.CommandText = @"
             INSERT INTO malfunctions (sensor_id, description, resolved)
             VALUES ($sensor_id, $description, $resolved);";
-
-        command.Parameters.AddWithValue("$id", malfunction.Id);
+        
         command.Parameters.AddWithValue("$sensor_id", malfunction.SensorId);
         command.Parameters.AddWithValue("$description", malfunction.Description);
         command.Parameters.AddWithValue("$resolved", malfunction.Resolved);
@@ -581,5 +621,66 @@ public class SensorService : ISensorService
         command.Parameters.AddWithValue("$description", malfunction.Description);
         command.Parameters.AddWithValue("$resolved", malfunction.Resolved);
         await command.ExecuteNonQueryAsync();
+    }
+
+
+    public async Task<ObservableCollection<SensorAlert>> GetSensorAlertsAsync()
+    {
+        var sensors = await GetSensorsAsync();
+
+        var alerts = new ObservableCollection<SensorAlert>();
+
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        await connection.OpenAsync();
+
+        var command = connection.CreateCommand();
+        command.CommandText = @"SELECT * FROM sensor_alerts";
+
+        
+        using var reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            alerts.Add(new SensorAlert
+            {
+                Id = reader.GetInt32(0),
+                SensorId = reader.GetInt32(1),
+                AlertType = reader.GetString(2),
+                Message = reader.GetString(3),
+                Severity = reader.GetString(4),
+                ThresholdValue = reader.GetDouble(5),
+                MeasuredValue = reader.GetDouble(6),
+                CreatedAt = reader.GetDateTime(7),
+                ResolvedAt = reader.IsDBNull(8) ? null : reader.GetDateTime(8),
+                Status = reader.GetString(9),
+            });
+        }
+
+        foreach(var alert in alerts)
+        {
+            alert.Sensor = sensors.Single(item => item.Id == alert.SensorId);
+        }
+
+        return alerts;
+    }
+
+    public async Task CreateAlertAsync(SensorAlert alert)
+    {
+        using var connection = new SqliteConnection($"Data Source={_dbPath}");
+        await connection.OpenAsync();
+
+        var command = connection.CreateCommand();
+        command.CommandText = @"
+            INSERT INTO sensor_alerts (sensor_id, alert_type, message, severity, threshold_value, measured_value)
+            VALUES ($sensor_id, $alert_type, $message, $severity, $threshold_value, $measured_value);";
+       
+        command.Parameters.AddWithValue("$sensor_id", alert.SensorId);
+        command.Parameters.AddWithValue("$alert_type", alert.AlertType);
+        command.Parameters.AddWithValue("$message", alert.Message);
+        command.Parameters.AddWithValue("$severity", alert.Severity);
+        command.Parameters.AddWithValue("$threshold_value", alert.ThresholdValue);
+        command.Parameters.AddWithValue("$measured_value", alert.MeasuredValue);
+
+        await command.ExecuteNonQueryAsync();
+
     }
 } 
