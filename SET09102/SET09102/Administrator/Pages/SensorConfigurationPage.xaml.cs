@@ -1,5 +1,6 @@
 using SET09102.Models;
 using SET09102.Services;
+using SET09102.Common.Contracts;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -9,13 +10,15 @@ namespace SET09102.Administrator.Pages;
 public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChanged
 {
     private readonly ISensorService _sensorService;
+    private readonly IFirmwareService _firmwareService;
     private ObservableCollection<Sensor> _sensors = [];
     public ICommand UpdateFirmwareCommand { get; }
     public ICommand UpdateConfigurationCommand { get; }
 
-    public SensorConfigurationPage(ISensorService sensorService)
+    public SensorConfigurationPage(ISensorService sensorService, IFirmwareService firmwareService)
     {
         _sensorService = sensorService;
+        _firmwareService = firmwareService;
         UpdateFirmwareCommand = new Command<int>(OnUpdateFirmware);
         UpdateConfigurationCommand = new Command<int>(OnUpdateConfiguration);
         InitializeComponent();
@@ -41,7 +44,7 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
         {
             try
             {
-                var newVersion = GetNextFirmwareVersion(sensor.FirmwareVersion);
+                var newVersion = _firmwareService.GetNextVersion(sensor.FirmwareVersion);
 
                 var performUpdate = await DisplayAlert("Update Firmware",
                     $"Are you sure you want to update firmware from '{sensor.FirmwareVersion}' to '{newVersion}' for sensor '{sensor.Name}'?", "Yes", "No");
@@ -110,23 +113,5 @@ public partial class SensorConfigurationPage : ContentPage, INotifyPropertyChang
     private async Task LoadSensorsAsync()
     {
         Sensors = await _sensorService.GetSensorsAsync();
-    }
-
-    private static string GetNextFirmwareVersion(string firmwareVersion)
-    {
-        var versionParts = firmwareVersion.Split('.');
-
-        if (versionParts.Length == 3)
-        {
-            if (int.TryParse(versionParts[0], out int major) &&
-                int.TryParse(versionParts[1], out int minor) &&
-                int.TryParse(versionParts[2], out int patch))
-            {
-                major++;
-                return $"{major}.0.0";
-            }
-        }
-
-        throw new Exception($"The firmware version was not in the expected format - {firmwareVersion}");
-    }
+    }    
 }

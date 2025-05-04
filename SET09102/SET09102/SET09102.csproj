@@ -85,6 +85,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\SET09102.Common\SET09102.Common.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="SampleData\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
