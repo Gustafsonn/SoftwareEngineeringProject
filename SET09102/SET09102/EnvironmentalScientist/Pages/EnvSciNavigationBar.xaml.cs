@@ -19,11 +19,11 @@ namespace SET09102.EnvironmentalScientist.Pages
             await Shell.Current.GoToAsync("//EnvironmentalScientist/MainPage");
         }
 
-        private async void OnMapClicked(object sender, EventArgs e)
+        private async void OnThresholdClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//EnvironmentalScientist/MapPage");
+            await Shell.Current.GoToAsync("//EnvironmentalScientist/DisplayThresholdAlerts");
         }
-        
+
         private async void OnHistoricalDataClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync("//EnvironmentalScientist/HistoricalData");

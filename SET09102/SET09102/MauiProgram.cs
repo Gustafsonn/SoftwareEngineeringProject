@@ -1,4 +1,6 @@
 ﻿using SET09102.Services;
+using SET09102.Common.Services;
+using SET09102.Common.Contracts;
 using SET09102.Administrator.Pages;
 using SET09102.OperationsManager.Pages;
 
@@ -18,6 +20,8 @@ namespace SET09102
                 });
 
             // Register services
+            builder.Services.AddSingleton<IMapService, GoogleMapService>();
+            builder.Services.AddSingleton<IFirmwareService, FirmwareService>();
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<ISensorService>(_ => new SensorService(new DatabaseService().GetDatabasePath()));
             builder.Services.AddSingleton<DataImportService>();            

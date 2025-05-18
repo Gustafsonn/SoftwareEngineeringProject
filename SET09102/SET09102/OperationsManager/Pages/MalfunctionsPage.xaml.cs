@@ -59,8 +59,8 @@ public partial class MalfunctionsPage : ContentPage, INotifyPropertyChanged
                 OnPropertyChanged(nameof(NoSensorSelected));
                 _ = LoadMalfunctionsAsync();
             }
-        }
     }
+        }
 
     public bool IsSensorSelected => SelectedSensor != null;
 
