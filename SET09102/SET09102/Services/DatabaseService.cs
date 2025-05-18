@@ -7,11 +7,28 @@ using System.Threading.Tasks;
 
 namespace SET09102.Services
 {
+    /// <summary>
+    /// Provides core database functionality for the application, including database initialization,
+    /// connection management, and basic data operations.
+    /// </summary>
+    /// <remarks>
+    /// This service is responsible for:
+    /// - Setting up the database file path and connection string
+    /// - Creating database schema during initialization
+    /// - Verifying database structure
+    /// - Providing connection objects to other services
+    /// - Retrieving and storing environmental data
+    /// </remarks>
     public class DatabaseService
     {
         private readonly string _dbPath;
         private SqliteConnection? _connection;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseService"/> class.
+        /// Sets up the database file path in the application data directory.
+        /// </summary>
+        /// <exception cref="Exception">Thrown when there is an error setting up the database paths.</exception>
         public DatabaseService()
         {
             try
@@ -34,11 +51,16 @@ namespace SET09102.Services
             }
         }
 
+        /// <summary>
+        /// Initializes the database by creating necessary tables if they don't exist.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation.</returns>
+        /// <exception cref="Exception">Thrown when there is an error initializing the database.</exception>
         public async Task InitializeAsync()
         {
             try
             {
-                // Check if database already exists
+                // Check if database already exists and its schema is valid
                 if (File.Exists(_dbPath))
                 {
                     if (await VerifySchemaAsync())
@@ -47,15 +69,16 @@ namespace SET09102.Services
                     }
                     else
                     {
+                        // Delete existing database if schema is invalid
                         File.Delete(_dbPath);
                     }
                 }
 
-                // Create the database file
+                // Create the database file and open connection
                 _connection = new SqliteConnection($"Data Source={_dbPath}");
                 await _connection.OpenAsync();
 
-                // Create tables directly
+                // Define schema for database tables
                 var createTablesSql = @"
                     CREATE TABLE IF NOT EXISTS air_quality (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -163,12 +186,13 @@ namespace SET09102.Services
                         FOREIGN KEY (sensor_id) REFERENCES sensors(id)
                     );";
 
+                // Execute the SQL to create tables
                 using (var command = new SqliteCommand(createTablesSql, _connection))
                 {
                     await command.ExecuteNonQueryAsync();
                 }
 
-                // Initialize sensors
+                // Initialize sensors with default data
                 var sensorService = new SensorService(_dbPath);
                 await sensorService.InitializeSensorsAsync();
             }
@@ -178,6 +202,10 @@ namespace SET09102.Services
             }
         }
 
+        /// <summary>
+        /// Verifies that the database schema is valid by checking for required tables.
+        /// </summary>
+        /// <returns>True if the schema is valid; otherwise, false.</returns>
         private async Task<bool> VerifySchemaAsync()
         {
             try
@@ -208,11 +236,20 @@ namespace SET09102.Services
             }
         }
 
+        /// <summary>
+        /// Gets the full path to the database file.
+        /// </summary>
+        /// <returns>The database file path.</returns>
         public string GetDatabasePath()
         {
             return _dbPath;
         }
 
+        /// <summary>
+        /// Gets an open connection to the database.
+        /// If the connection doesn't exist or is closed, a new one is created and opened.
+        /// </summary>
+        /// <returns>An open SQLite connection.</returns>
         public SqliteConnection GetConnection()
         {
             if (_connection == null || _connection.State != System.Data.ConnectionState.Open)
@@ -223,7 +260,10 @@ namespace SET09102.Services
             return _connection;
         }
 
-        // Get environmental data from database
+        /// <summary>
+        /// Retrieves all environmental data from the database.
+        /// </summary>
+        /// <returns>A list of environmental data entities.</returns>
         public async Task<List<EnvironmentalDataEntity>> GetEnvironmentalDataAsync()
         {
             var data = new List<EnvironmentalDataEntity>();
@@ -248,7 +288,11 @@ namespace SET09102.Services
             return data;
         }
         
-        // Add method to save environmental data
+        /// <summary>
+        /// Saves environmental data to the database.
+        /// </summary>
+        /// <param name="data">The environmental data to save.</param>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task SaveEnvironmentalDataAsync(EnvironmentalDataEntity data)
         {
             using var connection = new SqliteConnection($"Data Source={_dbPath}");
@@ -271,12 +315,28 @@ namespace SET09102.Services
 // EnvironmentalDataEntity.cs
 namespace SET09102.Models
 {
-    // Rename this class to avoid confusion with the ViewModel
+    /// <summary>
+    /// Represents a single environmental data point stored in the database.
+    /// </summary>
+    /// <remarks>
+    /// This class is used for database operations and is distinct from the ViewModel
+    /// classes that might use this data for presentation.
+    /// </remarks>
     public class EnvironmentalDataEntity
     {
-        // Initialize properties with default values to avoid null reference issues
+        /// <summary>
+        /// Gets or sets the type of environmental data (e.g., temperature, humidity).
+        /// </summary>
         public string DataType { get; set; } = string.Empty;
+        
+        /// <summary>
+        /// Gets or sets the numerical value of the data point.
+        /// </summary>
         public double Value { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the timestamp when the data was recorded.
+        /// </summary>
         public string Timestamp { get; set; } = string.Empty;
     }
 }

@@ -3,6 +3,10 @@ using System.Runtime.CompilerServices;
 
 namespace SET09102.Models;
 
+/// <summary>
+/// Represents an environmental monitoring sensor with its properties, status, and metadata.
+/// Implements INotifyPropertyChanged to support UI data binding.
+/// </summary>
 public class Sensor : INotifyPropertyChanged
 {
     private int _id;
@@ -30,6 +34,9 @@ public class Sensor : INotifyPropertyChanged
     private DateTime _createdAt;
     private DateTime _updatedAt;
 
+    /// <summary>
+    /// Gets or sets the unique identifier for the sensor.
+    /// </summary>
     public int Id 
     { 
         get => _id; 
@@ -43,6 +50,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the site identifier where the sensor is located.
+    /// </summary>
     public int SiteId 
     { 
         get => _siteId; 
@@ -56,6 +66,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the descriptive name of the sensor.
+    /// </summary>
     public string Name 
     { 
         get => _name; 
@@ -69,6 +82,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the type of sensor (e.g., "Air Quality", "Water Quality", "Weather").
+    /// </summary>
     public string Type 
     { 
         get => _type; 
@@ -82,6 +98,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the measurement unit of the sensor (e.g., "°C", "µg/m³").
+    /// </summary>
     public string Unit 
     { 
         get => _unit; 
@@ -95,6 +114,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the physical location description of the sensor.
+    /// </summary>
     public string Location 
     { 
         get => _location; 
@@ -108,6 +130,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the latitude coordinate of the sensor's location.
+    /// </summary>
     public double Latitude 
     { 
         get => _latitude; 
@@ -121,6 +146,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the longitude coordinate of the sensor's location.
+    /// </summary>
     public double Longitude 
     { 
         get => _longitude; 
@@ -134,6 +162,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the site type where the sensor is located (e.g., "Urban Traffic").
+    /// </summary>
     public string SiteType 
     { 
         get => _siteType; 
@@ -147,6 +178,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the geographical zone of the sensor's location.
+    /// </summary>
     public string Zone 
     { 
         get => _zone; 
@@ -160,6 +194,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the urban agglomeration of the sensor's location.
+    /// </summary>
     public string Agglomeration 
     { 
         get => _agglomeration; 
@@ -173,6 +210,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the administrative authority responsible for the sensor.
+    /// </summary>
     public string Authority 
     { 
         get => _authority; 
@@ -186,6 +226,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets a value indicating whether the sensor is currently active.
+    /// </summary>
     public bool IsActive 
     { 
         get => _isActive; 
@@ -200,6 +243,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the date and time of the sensor's last calibration.
+    /// </summary>
     public DateTime LastCalibration 
     { 
         get => _lastCalibration; 
@@ -215,6 +261,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the scheduled date and time for the sensor's next calibration.
+    /// </summary>
     public DateTime NextCalibration 
     { 
         get => _nextCalibration; 
@@ -229,6 +278,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the minimum threshold value for the sensor's measurements.
+    /// </summary>
     public double? MinThreshold 
     { 
         get => _minThreshold; 
@@ -242,6 +294,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the maximum threshold value for the sensor's measurements.
+    /// </summary>
     public double? MaxThreshold 
     { 
         get => _maxThreshold; 
@@ -255,6 +310,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the current firmware version of the sensor.
+    /// </summary>
     public string FirmwareVersion 
     { 
         get => _firmwareVersion; 
@@ -268,6 +326,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the date and time of the sensor's last maintenance.
+    /// </summary>
     public DateTime? LastMaintenance 
     { 
         get => _lastMaintenance; 
@@ -281,6 +342,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the scheduled date and time for the sensor's next maintenance.
+    /// </summary>
     public DateTime? NextMaintenance 
     { 
         get => _nextMaintenance; 
@@ -294,6 +358,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the current operational status of the sensor (e.g., "operational", "maintenance", "offline").
+    /// </summary>
     public string Status 
     { 
         get => _status; 
@@ -309,6 +376,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets a detailed description of the sensor.
+    /// </summary>
     public string Description 
     { 
         get => _description; 
@@ -322,6 +392,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the date and time when the sensor record was created.
+    /// </summary>
     public DateTime CreatedAt 
     { 
         get => _createdAt; 
@@ -335,6 +408,9 @@ public class Sensor : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Gets or sets the date and time when the sensor record was last updated.
+    /// </summary>
     public DateTime UpdatedAt 
     { 
         get => _updatedAt; 
@@ -349,22 +425,47 @@ public class Sensor : INotifyPropertyChanged
     }
     
     // Extension properties for UI display
+
+    /// <summary>
+    /// Gets a color representing the current status of the sensor.
+    /// </summary>
     public string StatusColor => this.GetStatusColor();
+    
+    /// <summary>
+    /// Gets a formatted text representation of when the sensor was last calibrated.
+    /// </summary>
     public string LastCalibratedText => this.GetLastCalibratedText();
+    
+    /// <summary>
+    /// Gets a value indicating whether the sensor is due for calibration.
+    /// </summary>
     public bool IsDueForCalibration => this.IsDueForCalibration();
     
-    // Get a status text that properly formats the status with uppercase first letter
+    /// <summary>
+    /// Gets a properly formatted status text with the first letter capitalized.
+    /// </summary>
     public string StatusText => string.IsNullOrEmpty(Status) 
         ? "Unknown" 
         : char.ToUpper(Status[0]) + Status.Substring(1).ToLower();
 
+    /// <summary>
+    /// Occurs when a property value changes.
+    /// </summary>
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    /// <summary>
+    /// Raises the PropertyChanged event.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that changed.</param>
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
+    /// <summary>
+    /// Creates a new Sensor instance with the same property values as this instance.
+    /// </summary>
+    /// <returns>A new Sensor instance with copied property values.</returns>
     public Sensor Clone()
     {
         return new()
